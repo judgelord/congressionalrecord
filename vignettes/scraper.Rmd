@@ -1,0 +1,579 @@
+---
+title: "Scrape the Congressional Record with `rvest`"
+subtitle: 
+author: ""
+output:
+  html_document:
+    highlight: zenburn
+    toc: true
+    toc_float: true
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r global.options, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      cache = FALSE, 
+                      fig.width=8.5, 
+                      split = T,
+                      fig.align = 'center', 
+                      fig.path='figs/',
+                      warning=FALSE, 
+                      message=FALSE)
+
+
+library(tidyverse)
+library(rvest)
+library(readr)
+library(magrittr)
+library(tidytext)
+library(knitr)
+library(kableExtra)
+library(here)
+library(crayon)
+library(legislators)
+library(congressionalrecord)
+
+library(ggplot2); theme_set(theme_minimal())
+  options(
+    ggplot2.continuous.color = "viridis",
+    ggplot2.continuous.fill = "viridis"
+  )
+  scale_color_discrete <- function(...)
+    scale_color_viridis_d(...)
+  scale_fill_discrete <- function(...)
+    scale_fill_viridis_d(...)
+  
+kablebox <- . %>%  knitr::kable() %>% 
+  kable_styling() %>% 
+  scroll_box(height = "400px")
+```
+
+# Scrape URLs for each subsection of the Congressional Record
+
+As we do so, we retain some helpful metadata  
+
+- The record is divided by date 
+- The record is divided into three sections: Senate, House, Extensions of Remarks (text submitted to the record later) 
+- The page number ("S3253" is the 3,253rd page of the record, featuring remarks from the Senate)
+
+The Congressional Record has a page for each day: https://www.congress.gov/congressional-record/2017/6/6/senate-section
+
+On this page are URLs for each subsection. These URLs look like this:
+https://www.congress.gov/congressional-record/2017/6/6/senate-section/article/S3253-6
+
+We can identify linked text (`html_nodes("a")`), and put the URLs (`html_attr("href")`) and their text (`html_text()`) for each date and each section of the record into a data frame.  With `map_dfr` from the `purrr` package, we can then apply this to a range of dates. 
+
+```{r, eval=FALSE}
+# a date range to scrape
+dates <- seq(as.Date("2007/03/01"), 
+             as.Date("2007/03/02"),
+             #Sys.Date(), # today
+             by = "day")
+
+
+  ## For testing
+    # section <- "senate-section"
+    # date <- "2020-09-15"
+    # get_cr_df(date, section)
+
+# an empty dataframe for failed calls
+d_init <-  tibble(header = "",
+                  date = as.Date(NA),
+                  section = "",
+                  url = "")
+
+# a dataframe of headers, dates, and url paths
+senate <- map_dfr(dates, .f = possibly(get_cr_df, otherwise = d_init), section = "senate-section") 
+
+house <- map_dfr(dates, .f = possibly(get_cr_df, otherwise = d_init), section = "house-section") 
+
+ext <- map_dfr(dates, .f = possibly(get_cr_df, otherwise = d_init), section = "extensions-of-remarks-section") 
+
+cr_metadata <- full_join(senate, house) %>% 
+  full_join(ext)
+
+# drop dates where for which there is no record
+cr_metadata %<>% filter(header != "")
+
+# Make file var in metadata to merge in htm text
+cr_metadata %<>% 
+  mutate(file = url %>% 
+           str_replace(".*record", "CREC") %>% 
+           str_replace("[a-z].*article/", "pt1-Pg") %>%
+           str_replace_all("/", "-") %>% 
+           str_c(".htm")
+         ) 
+```
+
+```{r save, eval=FALSE}
+  temp <- cr_metadata
+
+# load previously saved data
+  load(here::here("data", "cr_metadata.Rdata"))
+  
+  # join with any new observations
+  cr_metadata %<>% full_join(temp)
+  
+  # save new metadata
+  save(cr_metadata, file = here::here("data", "cr_metadata.Rdata"))
+```
+
+# Option 1: Download the text of the congressional record
+
+The "View TXT in new window" URL takes us to a .htm file of just the congressional record text. Compared to the much larger .html of the main page, the (minimal) downside is that some of the header information is lost (nothing distinguishes main headers from subheaders).
+
+`html_session() %>% follow_link("View TXT in new window")` takes us to the raw TXT page. With `walk` from the `purrr` package, we can download each raw txt page to a file with the same name.
+
+```{r download_htm, eval = FALSE}
+# Identify files already downloaded 
+downloaded <- list.files(here::here("data", "htm"))
+length(downloaded)
+
+## test 
+# get_cr_htm(cr_metadata$url[1])
+
+cr_metadata %<>% arrange(date) %>% arrange(rev(date))
+
+# download file for each url 
+walk(cr_metadata$url, get_cr_htm)
+```
+
+TXT pages look like this: https://www.congress.gov/115/crec/2017/06/06/modified/CREC-2017-06-06-pt1-PgS3253-6.htm
+
+```{r}
+read_html("https://www.congress.gov/115/crec/2017/06/06/modified/CREC-2017-06-06-pt1-PgS3253-6.htm") %>% html_text() %>% str_split("\n") %>% kablebox()
+```
+
+# Option 2: Download the full HTML
+
+The full HTML of the landing page for each subsection appears to have some metadata beyond the TXT files. 
+
+- main subject headers 
+- possibly speaker IDs (speeches appear to be tagged with member IDs, but I have yet to find them in the HTML)
+
+> **_CAUTION:_**  The full HTML is several GB per year! 
+
+
+```{r download_html, eval = FALSE}
+# make file path
+cr_metadata %<>% 
+  mutate(file = str_c("CREC-", 
+                      date,"-",
+                      # the file title
+                      url %>% str_remove(".*article/"), 
+                      ".html"))
+
+# already downloaded 
+downloaded <- list.files(here::here("data", "html"))
+
+
+
+start <- Sys.time()
+walk2(cr_metadata$url, cr_metadata$file, get_cr_html)
+Sys.time() - start
+```
+
+
+
+
+# Number of documents over time
+
+
+```{r, include=FALSE, eval = TRUE}
+# load cached data
+load(here::here("data", "cr_metadata.Rdata"))
+```
+
+
+### In all, we have `r nrow(cr_metadata)` documents from `r min(cr_metadata$date)` to `r max(cr_metadata$date)`.
+
+
+### By day
+
+```{r cr-sections-day}
+# clean up data for plot clarity
+cr_metadata %<>% 
+  mutate(year = str_sub(date, 1,4),
+         chamber = section %>% 
+           str_remove("-.*") %>% 
+           str_to_title() %>%
+           str_replace("Extensions", "Extensions of Remarks")) 
+
+cr_metadata %>% 
+  ggplot() + 
+  aes(x = date) +
+  geom_bar() + 
+  facet_wrap("chamber", ncol = 1, scales = "free_y") 
+```
+
+
+
+### By year
+
+```{r cr-sections-year}
+cr_metadata %>% 
+  ggplot() + 
+  aes(x = year) +
+  geom_bar() + 
+  facet_wrap("chamber", ncol = 1)
+```
+
+
+### By speaker
+
+```{r}
+cr <- list.files(here::here("data/htm"))
+
+# extract date from file name
+d <- tibble(file = cr,
+       date = str_extract(cr, "[0-9]{4}-[0-9]{2}-[0-9]{2}") %>% 
+         as.Date)
+
+d %<>% arrange(date) %>% arrange(rev(date))
+
+#FIXME
+# just using 1000 documents for now
+d %<>% top_n(100, date)
+
+#d %<>% filter(date > as.Date("2019-03-01"),
+#              date < as.Date("2019-03-19"))
+
+# get speakers
+#d %<>% 
+#d$spspeaker <-   map_chr(d$file, possibly(extract_names, otherwise = ""))
+#/FIXME ,_ 
+
+d %<>% mutate(url_txt = str_c("https://www.congress.gov/117/crec/", 
+                          date %>% str_replace_all("-", "/"), 
+                          "/modified/", 
+                          file))
+
+
+
+
+
+
+
+# Extract speaker names
+
+extract_names(d$file[1])
+
+d %<>%
+  mutate(speaker = file %>% map_chr(possibly(extract_names, otherwise = "")))
+
+# extract names
+# cr_metadata %<>%
+#   mutate(speaker = file %>% map_chr(possibly(extract_names, otherwise = "")))
+
+############################################
+# join metadata to file names 
+#FIXME for some reason, urls without a -[1-9] at the end seem to be missing from the metadata
+d %<>% left_join(cr_metadata)
+```
+
+
+```{r speakers, eval = FALSE}
+d %>% 
+  filter(speaker != "") %>% 
+  count(speaker, year) %>% 
+  ggplot() + 
+  aes(x = year, y = n, label = speaker) + 
+    geom_label()
+```
+
+
+
+# Section Headers
+
+> **NOTE:** The plots below use the number of subsections and their headers. Thus, they only require the metadata from scraping the URLs, not the full text.
+
+
+
+
+## Most common headers
+```{r cr_subtypes}
+# clean up headers 
+cr_metadata %<>% 
+         mutate(subtype = header %>% 
+           toupper() %>% 
+           str_remove(";.*") %>% 
+           str_replace(".*ACT.*", "ACT") %>% 
+             str_replace("MESSAGE ", "MESSAGES ") %>%
+             str_replace("CONDEMNING.*", "CONDEMNING") %>%
+           str_remove_all(" BY .*| UNTIL.*| \\(EXECUTIVE.*")
+         )
+
+# top 100 headers
+cr_metadata %>% 
+  count(subtype, sort = T) %>% 
+  head(100) %>% 
+  kablebox()
+
+top10 <- cr_metadata %>% count(subtype, sort = T) %>% .$subtype %>% head(10)
+
+cr_metadata %>% 
+  filter(subtype %in% top10) %>% 
+  ggplot() + 
+  aes(x = date, fill = subtype) +
+  geom_bar(width = .9) +
+  labs(fill = "Most common topics") + 
+  facet_wrap("chamber", ncol = 1, scales = "free")
+```
+
+## Most discussed acts
+```{r cr_acts, fig.width = 10}
+# top 100 headers
+cr_metadata %>% 
+  filter(str_detect(header, " ACT( |$)")) %>%
+  count(header, sort = T) %>% 
+  head(100) %>% 
+  kablebox()
+
+top10 <- cr_metadata %>% 
+  filter(str_detect(header, " ACT( |$)")) %>%
+  count(header, sort = T) %>% .$header %>% head(10)
+
+cr_metadata %>% 
+  filter(header %in% top10) %>% 
+  mutate(header = header %>% str_remove(";.*")) %>%
+  ggplot() + 
+  aes(x = factor(year), fill = header) +
+  geom_bar(width = .9) +
+  labs(fill = "Most discussed acts",
+       x = "Year") + 
+  facet_wrap("chamber", ncol = 1, scales = "free_y") 
+```
+
+---
+
+---
+
+# Full Text Search
+
+```{r}
+
+
+
+
+  
+##############################################
+# a function to grab sentences with keywords
+keyword_sentence <- function(htm_file, word){
+  text <- read_lines(here::here("data", "htm", htm_file)) %>% 
+    str_c(collapse = " ") %>% 
+    str_squish()
+  
+  if( str_detect(text, regex(word, ignore_case = T) ) ){
+     text %<>%
+      enframe(name = NULL, value = "text") %>%
+      unnest_tokens(sentence, text, token = "sentences") %>% 
+      filter(str_detect(sentence, regex(word, ignore_case = T) )) %>% 
+      pull(sentence) %>% 
+      str_c(collapse = "...") %>% 
+      str_to_sentence()
+  } else {
+    text <- "NA"
+  }
+    
+  return(text)
+}
+
+## test 
+# keyword_sentence(file = d$file[6], word = "speaker")
+```
+
+Sentences containing "speaker" on `r max(d$date)`
+
+(a good test because most speaches in the House address the speaker)
+
+```{r}
+d %>% 
+  filter(date == max(d$date) ) %>% 
+  mutate(sentence = map_chr(file, .f = keyword_sentence, word = "speaker") ) %>%
+  select(date, sentence, url) %>%
+  filter(sentence != "NA") %>% kablebox()
+```
+
+---
+
+Sentences containing "census" between `r min(d$date)` and `r max(d$date)`
+
+```{r}
+d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "biosurveillance") ) %>%
+  filter(sentence != "NA") %>% 
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+  unnest(sentence)
+
+d1  %>%
+  ggplot () + 
+  aes(x = date) + 
+  geom_bar() 
+
+d1 %>% 
+  select(#speaker, 
+         date, sentence, #header, 
+         url_txt) %>% 
+  kablebox()
+```
+
+---
+
+Sentences containing "redistrict" "efficiency gap" or "gerrymander" between `r min(d$date)` and `r max(d$date)`
+
+```{r}
+d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "redistrict|gerrymander|efficiency gap") ) %>%
+  filter(sentence != "NA") %>% 
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+  unnest(sentence)
+
+d1 %>% 
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+  unnest(sentence) %>%
+  ggplot () + 
+  aes(x = date) + 
+  geom_bar() 
+
+d1 %>% 
+  select(date, sentence, header, url_txt) %>% 
+  kablebox()
+```
+
+---
+
+## Partisan rhetoric
+
+Sentences containing "partisan" between `r min(d$date)` and `r max(d$date)`
+
+```{r}
+d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "partisan") ) %>%
+  filter(sentence != "NA") %>% 
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+  unnest(sentence)
+
+d1  %>%
+  ggplot () + 
+  aes(x = date) + 
+  geom_bar() 
+
+d1 %>% 
+  select(date, sentence, header, url_txt) %>% 
+  head(100) %>% 
+  kablebox()
+```
+
+---
+
+Sentences containing "democrat" or "republican" between `r min(d$date)` and `r max(d$date)`
+
+```{r}
+d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "democrat|republican") ) %>%
+  filter(sentence != "NA") %>% 
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+  unnest(sentence)
+
+d1  %>%
+  ggplot () + 
+  aes(x = date) + 
+  geom_bar() 
+
+d1 %>% 
+  select(date, sentence, header, url_txt) %>% 
+  head(100) %>%    kablebox()
+```
+
+---
+
+Sentences containing "my friend" or "my collegue" between `r min(d$date)` and `r max(d$date)`
+
+```{r}
+d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "my friend|my colleague|my new colleague") ) %>%
+  filter(sentence != "NA") %>% 
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+  unnest(sentence) 
+
+d1 %>% 
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+  unnest(sentence) %>%
+  ggplot () + 
+  aes(x = date) +
+  geom_bar()
+
+d1 %>% 
+  select(date, sentence, header, url_txt) %>% 
+  head(100) %>%    kablebox()
+```
+
+---
+
+Sentences containing "across the isle" or "side of the isle"  between `r min(d$date)` and `r max(d$date)`
+
+```{r}
+d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "aisle") ) %>%
+  filter(sentence != "NA") %>% 
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+  unnest(sentence)
+
+d1  %>%
+  ggplot () + 
+  aes(x = date) + 
+  geom_bar() 
+
+d1 %>% 
+  select(date, sentence, header, url_txt) %>% 
+  head(100) %>%    kablebox()
+```
+
+---
+
+## District representation
+
+Sentences containing "my state" "my district" or "my constituent" between `r min(d$date)` and `r max(d$date)`
+
+```{r}
+d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "my district|my constituent|my state") ) %>%
+  filter(sentence != "NA") %>% 
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+  unnest(sentence)
+
+d1 %>%
+  ggplot () + 
+  aes(x = date) + 
+  geom_bar() 
+
+d1 %>% 
+  select(date, sentence, header, url_txt) %>% 
+  head(100) %>%    kablebox()
+```
+
+---
+
+### States 
+
+Sentences containing state names between `r min(d$date)` and `r max(d$date)`
+
+```{r}
+states <- str_c(state.name, collapse = "|")
+
+states <- str_c("(in|for) (", states, ")") # cant use "of Wisconsin" because it is an epithet
+
+d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = states) ) %>%
+  filter(sentence != "NA") %>% 
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+  unnest(sentence)
+
+d1 %>%
+  ggplot () + 
+  aes(x = date) +
+  geom_bar() 
+
+d1 %>% 
+  select(date, sentence, header, url_txt) %>% #%>% pull(sentence)
+  head(100) %>% 
+  kablebox()
+```
+
+---
+

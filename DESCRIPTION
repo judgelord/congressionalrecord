@@ -1,0 +1,33 @@
+Package: congressionalrecord
+Type: Package
+Title: Scrape, parse, and analyze the Congressional Record
+Version: 0.0.0.1000
+Authors@R: 
+    c(person(given = "Devin",
+           family = "Judge-Lord",
+           role = c("aut", "cre"),
+           email = "devinjudgelord@fas.harvard.edu",
+           comment = c(ORCID = "0000-0002-4384-4380")))
+Maintainer: The package maintainer <DevinJudgeLord@fas.harvard.edu>
+Description: A suite of functions to scrape, parse, and analyze the U.S. Congressional Record.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+URL: https://judgelord.github.io/congressionalrecord/, https://github.com/judgelord/congressionalrecord
+BugReports: https://github.com/judgelord/congressionalrecord/issues
+Imports:
+	tidyverse,
+	crayon,
+	magrittr
+	here
+	readr
+	xml2
+	legislators
+Depends: 
+    R (>= 3.5.0)
+Suggests:
+      kableExtra,
+    	knitr, 
+    	rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 7.1.2

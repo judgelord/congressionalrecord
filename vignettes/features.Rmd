@@ -1,0 +1,133 @@
+---
+title: "Text Features from the Congressional Recored"
+subtitle: 
+author: ""
+output:
+  html_document:
+    highlight: zenburn
+    toc: true
+    toc_float: true
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r global.options, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      cache = FALSE, 
+                      fig.width=8.5, 
+                      split = T,
+                      fig.align = 'center', 
+                      fig.path='figs/',
+                      warning=FALSE, 
+                      message=FALSE)
+
+
+library(tidyverse)
+library(rvest)
+library(readr)
+library(magrittr)
+library(tidytext)
+library(knitr)
+library(kableExtra)
+library(here)
+library(crayon)
+
+library(ggplot2); theme_set(theme_minimal())
+  options(
+    ggplot2.continuous.color = "viridis",
+    ggplot2.continuous.fill = "viridis"
+  )
+  scale_color_discrete <- function(...)
+    scale_color_viridis_d(...)
+  scale_fill_discrete <- function(...)
+    scale_fill_viridis_d(...)
+  
+kablebox <- . %>% 
+  head(100) %>%
+  knitr::kable() %>% 
+  kable_styling() %>% 
+  scroll_box(height = "400px")
+```
+
+This script outines approaches to extract textual features of interest from the Congressional Record. 
+
+- Full texts and metadata scraped in the scraper vignette: https://judgelord.github.io/congressionalrecord/scraper.html
+
+- Speeches parsed in the parser vignette: https://judgelord.github.io/congressionalrecord/speakers.html
+
+### Files
+
+> Testing with a sample of 1000 speeches for now
+
+```{r}
+cr <- list.files(here::here("data", "txt"), recursive = T)
+
+d <- tibble(file = str_c("data/txt/", cr),
+       date = str_extract(cr, "[0-9]{4}-[0-9]{2}-[0-9]{2}") %>% 
+         as.Date,
+       year = str_sub(cr, 1, 4),
+       icpsr = str_remove_all(cr, ".*-|.txt"))
+
+kablebox(d)
+
+d %<>% filter(icpsr != "NA")
+
+# a function to grab sentences with keywords
+keyword_sentence <- function(file, word){
+  text <- read_lines(here::here(file)) %>% 
+    str_c(collapse = " ") %>% 
+    str_squish()
+  
+  if( str_detect(text, regex(word, ignore_case = T) ) ){
+     text %<>%
+      enframe(name = NULL, value = "text") %>%
+      unnest_tokens(sentence, text, token = "sentences") %>% 
+      filter(str_detect(sentence, word)) %>% 
+      .$sentence %>% 
+      str_c(collapse = "...")
+  } else {
+    text <- NA
+  }
+    
+  return(text)
+}
+
+## test 
+# keyword_sentence(d$file[1], "i am")
+```
+
+---
+
+### Sentences containing "district"
+```{r district}
+d %<>% mutate(district_sentences = purrr::map_chr(d$file, keyword_sentence, word = "district"))
+
+d %>% filter(!is.na(district_sentences)) %>% kablebox()
+```
+
+---
+
+### Words most often proceeding "district"
+```{r}
+
+
+d %>% mutate(district_preface = str_extract_all(district_sentences, "\\w+ district")) %>% 
+  unnest(district_preface) %>% count(district_preface, sort = T) %>% drop_na(district_preface) %>% kablebox()
+```
+
+---
+
+### Number of speeches per legislator
+```{r}
+d %>% add_count(icpsr, name = "Speeches") %>% 
+  drop_na(district_sentences, icpsr) %>% 
+  add_count(icpsr, name = "Speeches_with_district") %>%
+  mutate(district_sentences = str_split(district_sentences, "\\.\\.\\.")) %>%
+  unnest(district_sentences) %>% 
+  count(icpsr, Speeches, Speeches_with_district, name = "Total mentions of distirct") %>% 
+  kablebox()
+```
+
+
