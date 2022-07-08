@@ -127,7 +127,7 @@ escape_specials <- . %>%
 # for testing
 # speaker_list <- d$speaker[22]
 # file <- d$file[22]
-parse <- function(speaker_list, file){
+parse_by_speaker <- function(speaker_list, file){
 
   speaker_list %<>% escape_specials()
 
@@ -158,14 +158,14 @@ parse <- function(speaker_list, file){
 }
 
 ## test
-# parse(d$speaker[1], d$file[1])
+# parse_by_speaker(d$speaker[1], d$file[1])
 
-# A function applying the parse function to speakers and files in a dataframe, returing a longer dataframe that includes texts
+# A function applying the parse_by_speaker function to speakers and files in a dataframe, returing a longer dataframe that includes texts
 parse_text <- function(d){
 
   d$text <- map2(.x = d$speaker,
                .y = d$file,
-               .f = parse) # %>% flatten()
+               .f = parse_by_speaker) # %>% flatten()
 
   d %<>% unnest(text)
 

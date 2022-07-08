@@ -1,13 +1,18 @@
-\name{parse}
-\alias{parse}
+\name{parse_by_speaker}
+\alias{parse_by_speaker}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Parse the congressional record by speaker}
+A helper function to parse files with more than one speaker
+}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This is a function used by `parse_cr`.
+It takes takes a vector of regular expressions (`speaker_list`) and a file path (`file`).
+It uses the `all_text` function to read the text file.
+It uses the `escape_specials` function to clean the speaker list and creates a regular expression of strings (speaker names) at which to split the text.
+Finally it splits the text by speakerand returns a vector of speeches.
 }
 \usage{
-parse(speaker_list, file)
+parse_by_speaker(speaker_list, file)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -15,27 +20,23 @@ parse(speaker_list, file)
 %%     ~~Describe \code{speaker_list} here~~
 }
   \item{file}{
-%%     ~~Describe \code{file} here~~
+A path to a txt file to be paresed
 }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+A character vector of texts parsed by speaker
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Devin Judge-Lord
 }
 \note{
-%%  ~~further notes~~
+This is a helper function for the main user-facing function `cr_parse()`
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -44,9 +45,6 @@ parse(speaker_list, file)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
 function (speaker_list, file)

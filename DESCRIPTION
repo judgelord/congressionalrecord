@@ -1,7 +1,7 @@
 Package: congressionalrecord
 Type: Package
 Title: Scrape, parse, and analyze the Congressional Record
-Version: 0.0.0.1000
+Version: 0.0.1
 Authors@R: 
     c(person(given = "Devin",
            family = "Judge-Lord",
@@ -18,10 +18,10 @@ BugReports: https://github.com/judgelord/congressionalrecord/issues
 Imports:
 	tidyverse,
 	crayon,
-	magrittr
-	here
-	readr
-	xml2
+	magrittr,
+	here,
+	readr,
+	xml2,
 	legislators
 Depends: 
     R (>= 3.5.0)
@@ -30,4 +30,3 @@ Suggests:
     	knitr, 
     	rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2

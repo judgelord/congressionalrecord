@@ -24,13 +24,16 @@ library(rvest)
 ```
 
 
-<img src="man/figures/logo.png" width="200" />
 
-# Scrape, parse, and analyze the Congressional Record 
+# Scrape, parse, and analyze the Congressional Record <img src="man/figures/logo.png" width="200" />
+
+  <!-- badges: start -->
+  [![CRAN status](https://www.r-pkg.org/badges/version/congressionalrecord)](https://CRAN.R-project.org/package=congressionalrecord)
+  <!-- badges: end -->
 
 ### Installation
 ```
-devtools::install_github("judgelord/congressionalrecored")
+devtools::install_github("judgelord/congressionalrecord")
 ```
 
 ```{r, message=FALSE}
@@ -91,7 +94,7 @@ parsed_cr <- list.files(directory, recursive = T) |> head()
 
 parsed_cr
 
-readLines(here::here(directory, parsed_cr[1]))
+readLines(here::here(directory, parsed_cr[1])) 
 ```
 
 Speeches by John Conyers are in folder "10713" (his ICPSR number).
@@ -103,7 +106,7 @@ Speeches by John Conyers are in folder "10713" (his ICPSR number).
 - Preliminary work on feature extraction is [here](https://judgelord.github.io/cr/features)  
 - There is also a brief tutorial on feature extraction at the end of the scraper docs [here](https://judgelord.github.io/congressionalrecord/scraper.html#Text_features)
 
-![](vignettes/figs/covid-1.png)
+![](man/figures/covid-1.png)
 
 
 ### Notes about these data and methods

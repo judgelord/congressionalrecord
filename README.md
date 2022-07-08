@@ -1,13 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src="man/figures/logo.png" width="200" />
+# Scrape, parse, and analyze the Congressional Record <img src="man/figures/logo.png" width="200" />
 
-# Scrape, parse, and analyze the Congressional Record
+<!-- badges: start --> [![CRAN
+status](https://www.r-pkg.org/badges/version/congressionalrecord)](https://CRAN.R-project.org/package=congressionalrecord)
+<!-- badges: end -->
 
 ### Installation
 
-    devtools::install_github("judgelord/congressionalrecored")
+    devtools::install_github("judgelord/congressionalrecord")
 
 ``` r
 library(congressionalrecord)
@@ -115,7 +117,7 @@ parse_cr()
 
     #> Searching  data for members of the 110th, n = 1208 (324 distinct strings).
 
-    #> Names matched in 10 seconds
+    #> Names matched in 9 seconds
 
     #> Joining, by = c("congress", "pattern", "first_name", "last_name")
 
@@ -129,7 +131,7 @@ parsed_cr
     #> [4] "2007/10808/CREC-2007-03-01-pt1-PgH2043-3-000397-10808.txt" "2007/10808/CREC-2007-03-01-pt1-PgS2460-2-000940-10808.txt" "2007/10808/CREC-2007-03-01-pt1-PgS2487-6-001014-10808.txt"
 
 ``` r
-readLines(here::here(directory, parsed_cr[1]))
+readLines(here::here(directory, parsed_cr[1])) 
 ```
 
     #> [1] "HON. JOHN CONYERS ::: , JR. of michigan in the house of representatives Thursday, March 1, 2007 "
@@ -146,7 +148,7 @@ Speeches by John Conyers are in folder “10713” (his ICPSR number).
     the scraper docs
     [here](https://judgelord.github.io/congressionalrecord/scraper.html#Text_features)
 
-![](vignettes/figs/covid-1.png)
+![](man/figures/covid-1.png)
 
 ### Notes about these data and methods
 
