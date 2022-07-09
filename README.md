@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Scrape, parse, and analyze the Congressional Record <img src="man/figures/logo.png" align = "right" width="150" />
+# congressionalrecord: Scrape, parse, and analyze the Congressional Record <img src="man/figures/logo.png" align = "right" width="150" />
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/congressionalrecord)](https://CRAN.R-project.org/package=congressionalrecord)
@@ -64,7 +64,7 @@ cr_metadata
     #> # … with 45 more rows
 
 Scraper methods are described
-[here](https://judgelord.github.io/congressionalrecord/scraper.html)
+[here](https://judgelord.github.io/congressionalrecord/articles/scraper.html)
 along with code for tables and figures to summarize theese metadata
 
 <img src="man/figures/cr_subtypes-1.png" style="display: block; margin: auto;" />
@@ -137,7 +137,7 @@ readLines(here::here("data", "htm", "CREC-2007-03-01-pt1-PgS2437.htm"))
     may specify a custom vector of `dates` or `skip_parsed = FALSE` if
     you don’t want to skipped files already parsed.
 -   the parser methods are explained
-    [here](https://judgelord.github.io/congressionalrecord/speakers)
+    [here](https://judgelord.github.io/congressionalrecord/articles/speakers.html)
 
 ``` r
 # default location where txt files will be saved
@@ -149,11 +149,11 @@ parse_cr()
 
     #> 2007-03-01
 
-    #> Typos fixed in 18 seconds
+    #> Typos fixed in 17 seconds
 
     #> Searching  data for members of the 110th, n = 1208 (324 distinct strings).
 
-    #> Names matched in 8 seconds
+    #> Names matched in 9 seconds
 
     #> Joining, by = c("congress", "pattern", "first_name", "last_name")
 
@@ -212,7 +212,7 @@ readLines(here::here(directory, parsed_cr[4]))
     [here](https://judgelord.github.io/cr/features)  
 -   There is also a brief tutorial on feature extraction at the end of
     the scraper vignette
-    [here](https://judgelord.github.io/congressionalrecord/scraper.html#Text_features)
+    [here](https://judgelord.github.io/congressionalrecord/articles/scraper.html#Text_features)
 
 ![](man/figures/covid-1.png)
 

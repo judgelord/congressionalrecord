@@ -65,7 +65,7 @@ cr_metadata <- get_cr_df(as.Date("2007/03/01"), section = "senate-section")
 cr_metadata
 ```
 
-Scraper methods are described [here](https://judgelord.github.io/congressionalrecord/scraper.html) along with code for tables and figures to summarize theese metadata
+Scraper methods are described [here](https://judgelord.github.io/congressionalrecord/articles/scraper.html) along with code for tables and figures to summarize theese metadata
 
 ```{r, echo= FALSE}
 knitr::include_graphics("man/figures/cr_subtypes-1.png")
@@ -94,7 +94,7 @@ readLines(here::here("data", "htm", "CREC-2007-03-01-pt1-PgS2437.htm"))
 ### 2. Parse the record into .txt files by speaker
 
 - The next set of functions to parse htm sections of the record by speaker and tag members with their ICPSR ID numbers. By default, `parse_cr()` will parse all htm files in the "data/htm" directory for dates that do not already appear in a "data/txt" directory. You may specify a custom vector of `dates` or `skip_parsed = FALSE` if you don't want to skipped files already parsed.
-- the parser methods are explained [here](https://judgelord.github.io/congressionalrecord/speakers)
+- the parser methods are explained [here](https://judgelord.github.io/congressionalrecord/articles/speakers.html)
 
 ```{r}
 # default location where txt files will be saved
@@ -137,7 +137,7 @@ readLines(here::here(directory, parsed_cr[4]))
 ### 3. Count and extract sentences that contain user-specified phrases
 
 - Preliminary work on feature extraction is [here](https://judgelord.github.io/cr/features)  
-- There is also a brief tutorial on feature extraction at the end of the scraper vignette [here](https://judgelord.github.io/congressionalrecord/scraper.html#Text_features)
+- There is also a brief tutorial on feature extraction at the end of the scraper vignette [here](https://judgelord.github.io/congressionalrecord/articles/scraper.html#Text_features)
 
 ![](man/figures/covid-1.png)
 
