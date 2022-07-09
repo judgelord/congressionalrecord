@@ -1,7 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Scrape, parse, and analyze the Congressional Record <img src="man/figures/logo.png" width="150" />
+# Scrape, parse, and analyze the Congressional Record
+
+<img src="man/figures/logo.png" width="150" />
 
 ### Installation
 

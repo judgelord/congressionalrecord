@@ -16,7 +16,11 @@ LazyData: true
 URL: https://judgelord.github.io/congressionalrecord/, https://github.com/judgelord/congressionalrecord
 BugReports: https://github.com/judgelord/congressionalrecord/issues
 Imports:
-	tidyverse,
+	dplyr,
+	purrr,
+	rvest,
+	stringr,
+	tidyr,
 	crayon,
 	magrittr,
 	here,

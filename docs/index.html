@@ -88,10 +88,10 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<p><img src="reference/figures/logo.png" width="200"></p>
 <div class="section level1">
 <div class="page-header"><h1 id="scrape-parse-and-analyze-the-congressional-record">Scrape, parse, and analyze the Congressional Record<a class="anchor" aria-label="anchor" href="#scrape-parse-and-analyze-the-congressional-record"></a>
 </h1></div>
+<p><img src="reference/figures/logo.png" width="150"></p>
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h3>
@@ -186,7 +186,7 @@ member</li>
 <span class="fu"><a href="reference/parse_cr.html">parse_cr</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2007-03-01</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Typos fixed in 19 seconds</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Typos fixed in 18 seconds</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching  data for members of the 110th, n = 1208 (324 distinct strings).</span></span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -200,7 +200,7 @@ member</li>
 <div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "2007/10713/CREC-2007-03-01-pt1-PgE444-000140-10713.txt"    "2007/10713/CREC-2007-03-01-pt1-PgE444-000141-10713.txt"    "2007/10713/CREC-2007-03-01-pt1-PgH2118-000715-10713.txt"  </span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] "2007/10808/CREC-2007-03-01-pt1-PgH2043-3-000397-10808.txt" "2007/10808/CREC-2007-03-01-pt1-PgS2460-2-000940-10808.txt" "2007/10808/CREC-2007-03-01-pt1-PgS2487-6-001014-10808.txt"</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="va">directory</span>, <span class="va">parsed_cr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="va">directory</span>, <span class="va">parsed_cr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "HON. JOHN CONYERS ::: , JR. of michigan in the house of representatives Thursday, March 1, 2007 "</span></span></code></pre></div>
 <p>Speeches by John Conyers are in folder “10713” (his ICPSR
 number).</p>
@@ -217,7 +217,7 @@ phrases<a class="anchor" aria-label="anchor" href="#3-count-and-extract-sentence
 the scraper docs <a href="https://judgelord.github.io/congressionalrecord/scraper.html#Text_features" class="external-link">here</a>
 </li>
 </ul>
-<p><img src="articles/figs/covid-1.png"></p>
+<p><img src="reference/figures/covid-1.png"></p>
 </div>
 <div class="section level3">
 <h3 id="notes-about-these-data-and-methods">Notes about these data and methods<a class="anchor" aria-label="anchor" href="#notes-about-these-data-and-methods"></a>

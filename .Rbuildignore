@@ -3,6 +3,8 @@
 ^vignettes$
 ^hex$
 ^LICENSE\.md$
-^txt$
-^htm$
+^.*txt$
+^.*htm$
 $cr_metadata\.rda$
+^docs$
+^pkgdown$
