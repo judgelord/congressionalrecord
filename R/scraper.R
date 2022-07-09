@@ -1,11 +1,3 @@
-library(tidyverse)
-library(xml2)
-library(rvest)
-library(readr)
-library(magrittr)
-library(tidytext)
-library(here)
-
 # Scrape URLs for each subsection of the Congressional Record
 
 # As we do so, we retain some helpful metadata

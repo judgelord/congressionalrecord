@@ -24,17 +24,19 @@ knitr::opts_chunk$set(echo = TRUE,
                       message=FALSE)
 
 
-library(tidyverse)
+# TODO remove magritter?
+library(magrittr)
+library(dplyr)
+library(stringr)
+library(purrr)
+library(tidyr)
+library(tidytext)
 library(rvest)
 library(readr)
-library(magrittr)
-library(tidytext)
-library(knitr)
-library(kableExtra)
-library(here)
-library(crayon)
+library(tidyr)
 library(legislators)
 library(congressionalrecord)
+
 
 library(ggplot2); theme_set(theme_minimal())
   options(
@@ -46,9 +48,12 @@ library(ggplot2); theme_set(theme_minimal())
   scale_fill_discrete <- function(...)
     scale_fill_viridis_d(...)
   
-kablebox <- . %>%  knitr::kable() %>% 
-  kable_styling() %>% 
-  scroll_box(height = "400px")
+kable <- function(x) {
+  x %>% 
+  knitr::kable() %>%
+  kableExtra::kable_styling() %>%
+  kableExtra::scroll_box(height = "400px")
+}
 ```
 
 # Scrape URLs for each subsection of the Congressional Record
@@ -73,18 +78,6 @@ dates <- seq(as.Date("2007/03/01"),
              #Sys.Date(), # today
              by = "day")
 
-
-  ## For testing
-    # section <- "senate-section"
-    # date <- "2020-09-15"
-    # get_cr_df(date, section)
-
-# an empty dataframe for failed calls
-d_init <-  tibble(header = "",
-                  date = as.Date(NA),
-                  section = "",
-                  url = "")
-
 # a dataframe of headers, dates, and url paths
 senate <- map_dfr(dates, .f = possibly(get_cr_df, otherwise = d_init), section = "senate-section") 
 
@@ -92,7 +85,7 @@ house <- map_dfr(dates, .f = possibly(get_cr_df, otherwise = d_init), section = 
 
 ext <- map_dfr(dates, .f = possibly(get_cr_df, otherwise = d_init), section = "extensions-of-remarks-section") 
 
-cr_metadata <- full_join(senate, house) %>% 
+cr_metadata <- full_join(senate, house) %>%
   full_join(ext)
 
 # drop dates where for which there is no record
@@ -100,10 +93,10 @@ cr_metadata %<>% filter(header != "")
 
 # Make file var in metadata to merge in htm text
 cr_metadata %<>% 
-  mutate(file = url %>% 
-           str_replace(".*record", "CREC") %>% 
+  mutate(file = url %>%
+           str_replace(".*record", "CREC") %>%
            str_replace("[a-z].*article/", "pt1-Pg") %>%
-           str_replace_all("/", "-") %>% 
+           str_replace_all("/", "-") %>%
            str_c(".htm")
          ) 
 ```
@@ -125,17 +118,12 @@ cr_metadata %<>%
 
 The "View TXT in new window" URL takes us to a .htm file of just the congressional record text. Compared to the much larger .html of the main page, the (minimal) downside is that some of the header information is lost (nothing distinguishes main headers from subheaders).
 
-`html_session() %>% follow_link("View TXT in new window")` takes us to the raw TXT page. With `walk` from the `purrr` package, we can download each raw txt page to a file with the same name.
+`html_session() %>%follow_link("View TXT in new window")` takes us to the raw TXT page. With `walk` from the `purrr` package, we can download each raw txt page to a file with the same name.
 
 ```{r download_htm, eval = FALSE}
 # Identify files already downloaded 
 downloaded <- list.files(here::here("data", "htm"))
 length(downloaded)
-
-## test 
-# get_cr_htm(cr_metadata$url[1])
-
-cr_metadata %<>% arrange(date) %>% arrange(rev(date))
 
 # download file for each url 
 walk(cr_metadata$url, get_cr_htm)
@@ -144,7 +132,10 @@ walk(cr_metadata$url, get_cr_htm)
 TXT pages look like this: https://www.congress.gov/115/crec/2017/06/06/modified/CREC-2017-06-06-pt1-PgS3253-6.htm
 
 ```{r}
-read_html("https://www.congress.gov/115/crec/2017/06/06/modified/CREC-2017-06-06-pt1-PgS3253-6.htm") %>% html_text() %>% str_split("\n") %>% kablebox()
+read_html("https://www.congress.gov/115/crec/2017/06/06/modified/CREC-2017-06-06-pt1-PgS3253-6.htm") %>%
+  html_text() %>%
+  str_split("\n") %>%
+  kable()
 ```
 
 # Option 2: Download the full HTML
@@ -163,7 +154,7 @@ cr_metadata %<>%
   mutate(file = str_c("CREC-", 
                       date,"-",
                       # the file title
-                      url %>% str_remove(".*article/"), 
+                      url %>%str_remove(".*article/"), 
                       ".html"))
 
 # already downloaded 
@@ -197,12 +188,12 @@ load(here::here("data", "cr_metadata.Rdata"))
 # clean up data for plot clarity
 cr_metadata %<>% 
   mutate(year = str_sub(date, 1,4),
-         chamber = section %>% 
-           str_remove("-.*") %>% 
+         chamber = section %>%
+           str_remove("-.*") %>%
            str_to_title() %>%
            str_replace("Extensions", "Extensions of Remarks")) 
 
-cr_metadata %>% 
+cr_metadata %>%
   ggplot() + 
   aes(x = date) +
   geom_bar() + 
@@ -214,7 +205,7 @@ cr_metadata %>%
 ### By year
 
 ```{r cr-sections-year}
-cr_metadata %>% 
+cr_metadata %>%
   ggplot() + 
   aes(x = year) +
   geom_bar() + 
@@ -232,7 +223,9 @@ d <- tibble(file = cr,
        date = str_extract(cr, "[0-9]{4}-[0-9]{2}-[0-9]{2}") %>% 
          as.Date)
 
-d %<>% arrange(date) %>% arrange(rev(date))
+d %<>% 
+  arrange(date) %>%
+  arrange(rev(date))
 
 #FIXME
 # just using 1000 documents for now
@@ -247,7 +240,7 @@ d %<>% top_n(100, date)
 #/FIXME ,_ 
 
 d %<>% mutate(url_txt = str_c("https://www.congress.gov/117/crec/", 
-                          date %>% str_replace_all("-", "/"), 
+                          date %>%str_replace_all("-", "/"), 
                           "/modified/", 
                           file))
 
@@ -262,11 +255,11 @@ d %<>% mutate(url_txt = str_c("https://www.congress.gov/117/crec/",
 extract_names(d$file[1])
 
 d %<>%
-  mutate(speaker = file %>% map_chr(possibly(extract_names, otherwise = "")))
+  mutate(speaker = file %>%map_chr(possibly(extract_names, otherwise = "")))
 
 # extract names
 # cr_metadata %<>%
-#   mutate(speaker = file %>% map_chr(possibly(extract_names, otherwise = "")))
+#   mutate(speaker = file %>%map_chr(possibly(extract_names, otherwise = "")))
 
 ############################################
 # join metadata to file names 
@@ -276,9 +269,9 @@ d %<>% left_join(cr_metadata)
 
 
 ```{r speakers, eval = FALSE}
-d %>% 
-  filter(speaker != "") %>% 
-  count(speaker, year) %>% 
+d %>%
+  filter(speaker != "") %>%
+  count(speaker, year) %>%
   ggplot() + 
   aes(x = year, y = n, label = speaker) + 
     geom_label()
@@ -297,25 +290,28 @@ d %>%
 ```{r cr_subtypes}
 # clean up headers 
 cr_metadata %<>% 
-         mutate(subtype = header %>% 
-           toupper() %>% 
-           str_remove(";.*") %>% 
-           str_replace(".*ACT.*", "ACT") %>% 
+         mutate(subtype = header %>%
+           toupper() %>%
+           str_remove(";.*") %>%
+           str_replace(".*ACT.*", "ACT") %>%
              str_replace("MESSAGE ", "MESSAGES ") %>%
              str_replace("CONDEMNING.*", "CONDEMNING") %>%
            str_remove_all(" BY .*| UNTIL.*| \\(EXECUTIVE.*")
          )
 
 # top 100 headers
-cr_metadata %>% 
+cr_metadata %>%
+  count(subtype, sort = T) %>%
+  head(100) %>%
+  kable()
+
+top10 <- cr_metadata %>%
   count(subtype, sort = T) %>% 
-  head(100) %>% 
-  kablebox()
+  .$subtype %>%
+  head(10)
 
-top10 <- cr_metadata %>% count(subtype, sort = T) %>% .$subtype %>% head(10)
-
-cr_metadata %>% 
-  filter(subtype %in% top10) %>% 
+cr_metadata %>%
+  filter(subtype %in% top10) %>%
   ggplot() + 
   aes(x = date, fill = subtype) +
   geom_bar(width = .9) +
@@ -326,19 +322,19 @@ cr_metadata %>%
 ## Most discussed acts
 ```{r cr_acts, fig.width = 10}
 # top 100 headers
-cr_metadata %>% 
+cr_metadata %>%
   filter(str_detect(header, " ACT( |$)")) %>%
-  count(header, sort = T) %>% 
-  head(100) %>% 
-  kablebox()
+  count(header, sort = T) %>%
+  head(100) %>%
+  kable()
 
-top10 <- cr_metadata %>% 
+top10 <- cr_metadata %>%
   filter(str_detect(header, " ACT( |$)")) %>%
-  count(header, sort = T) %>% .$header %>% head(10)
+  count(header, sort = T) %>%.$header %>%head(10)
 
-cr_metadata %>% 
-  filter(header %in% top10) %>% 
-  mutate(header = header %>% str_remove(";.*")) %>%
+cr_metadata %>%
+  filter(header %in% top10) %>%
+  mutate(header = header %>%str_remove(";.*")) %>%
   ggplot() + 
   aes(x = factor(year), fill = header) +
   geom_bar(width = .9) +
@@ -362,17 +358,17 @@ cr_metadata %>%
 ##############################################
 # a function to grab sentences with keywords
 keyword_sentence <- function(htm_file, word){
-  text <- read_lines(here::here("data", "htm", htm_file)) %>% 
-    str_c(collapse = " ") %>% 
+  text <- read_lines(here::here("data", "htm", htm_file)) %>%
+    str_c(collapse = " ") %>%
     str_squish()
   
   if( str_detect(text, regex(word, ignore_case = T) ) ){
      text %<>%
-      enframe(name = NULL, value = "text") %>%
-      unnest_tokens(sentence, text, token = "sentences") %>% 
-      filter(str_detect(sentence, regex(word, ignore_case = T) )) %>% 
-      pull(sentence) %>% 
-      str_c(collapse = "...") %>% 
+      tibble::enframe(name = NULL, value = "text") %>%
+      tidytext::unnest_tokens(sentence, text, token = "sentences") %>%
+      filter(str_detect(sentence, regex(word, ignore_case = T) )) %>%
+      pull(sentence) %>%
+      str_c(collapse = "...") %>%
       str_to_sentence()
   } else {
     text <- "NA"
@@ -390,11 +386,11 @@ Sentences containing "speaker" on `r max(d$date)`
 (a good test because most speaches in the House address the speaker)
 
 ```{r}
-d %>% 
-  filter(date == max(d$date) ) %>% 
+d %>%
+  filter(date == max(d$date) ) %>%
   mutate(sentence = map_chr(file, .f = keyword_sentence, word = "speaker") ) %>%
   select(date, sentence, url) %>%
-  filter(sentence != "NA") %>% kablebox()
+  filter(sentence != "NA") %>%kable()
 ```
 
 ---
@@ -402,9 +398,9 @@ d %>%
 Sentences containing "census" between `r min(d$date)` and `r max(d$date)`
 
 ```{r}
-d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "biosurveillance") ) %>%
-  filter(sentence != "NA") %>% 
-  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+d1 <- d %>%mutate(sentence = map_chr(file, .f = keyword_sentence, word = "biosurveillance") ) %>%
+  filter(sentence != "NA") %>%
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>%
   unnest(sentence)
 
 d1  %>%
@@ -412,11 +408,11 @@ d1  %>%
   aes(x = date) + 
   geom_bar() 
 
-d1 %>% 
+d1 %>%
   select(#speaker, 
          date, sentence, #header, 
-         url_txt) %>% 
-  kablebox()
+         url_txt) %>%
+  kable()
 ```
 
 ---
@@ -424,21 +420,21 @@ d1 %>%
 Sentences containing "redistrict" "efficiency gap" or "gerrymander" between `r min(d$date)` and `r max(d$date)`
 
 ```{r}
-d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "redistrict|gerrymander|efficiency gap") ) %>%
-  filter(sentence != "NA") %>% 
-  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+d1 <- d %>%mutate(sentence = map_chr(file, .f = keyword_sentence, word = "redistrict|gerrymander|efficiency gap") ) %>%
+  filter(sentence != "NA") %>%
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>%
   unnest(sentence)
 
-d1 %>% 
-  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+d1 %>%
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>%
   unnest(sentence) %>%
   ggplot () + 
   aes(x = date) + 
   geom_bar() 
 
-d1 %>% 
-  select(date, sentence, header, url_txt) %>% 
-  kablebox()
+d1 %>%
+  select(date, sentence, header, url_txt) %>%
+  kable()
 ```
 
 ---
@@ -448,9 +444,9 @@ d1 %>%
 Sentences containing "partisan" between `r min(d$date)` and `r max(d$date)`
 
 ```{r}
-d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "partisan") ) %>%
-  filter(sentence != "NA") %>% 
-  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+d1 <- d %>%mutate(sentence = map_chr(file, .f = keyword_sentence, word = "partisan") ) %>%
+  filter(sentence != "NA") %>%
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>%
   unnest(sentence)
 
 d1  %>%
@@ -458,10 +454,10 @@ d1  %>%
   aes(x = date) + 
   geom_bar() 
 
-d1 %>% 
-  select(date, sentence, header, url_txt) %>% 
-  head(100) %>% 
-  kablebox()
+d1 %>%
+  select(date, sentence, header, url_txt) %>%
+  head(100) %>%
+  kable()
 ```
 
 ---
@@ -469,9 +465,9 @@ d1 %>%
 Sentences containing "democrat" or "republican" between `r min(d$date)` and `r max(d$date)`
 
 ```{r}
-d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "democrat|republican") ) %>%
-  filter(sentence != "NA") %>% 
-  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+d1 <- d %>%mutate(sentence = map_chr(file, .f = keyword_sentence, word = "democrat|republican") ) %>%
+  filter(sentence != "NA") %>%
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>%
   unnest(sentence)
 
 d1  %>%
@@ -479,9 +475,9 @@ d1  %>%
   aes(x = date) + 
   geom_bar() 
 
-d1 %>% 
-  select(date, sentence, header, url_txt) %>% 
-  head(100) %>%    kablebox()
+d1 %>%
+  select(date, sentence, header, url_txt) %>%
+  head(100) %>%   kable()
 ```
 
 ---
@@ -489,21 +485,21 @@ d1 %>%
 Sentences containing "my friend" or "my collegue" between `r min(d$date)` and `r max(d$date)`
 
 ```{r}
-d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "my friend|my colleague|my new colleague") ) %>%
-  filter(sentence != "NA") %>% 
-  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+d1 <- d %>%mutate(sentence = map_chr(file, .f = keyword_sentence, word = "my friend|my colleague|my new colleague") ) %>%
+  filter(sentence != "NA") %>%
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>%
   unnest(sentence) 
 
-d1 %>% 
-  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+d1 %>%
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>%
   unnest(sentence) %>%
   ggplot () + 
   aes(x = date) +
   geom_bar()
 
-d1 %>% 
-  select(date, sentence, header, url_txt) %>% 
-  head(100) %>%    kablebox()
+d1 %>%
+  select(date, sentence, header, url_txt) %>%
+  head(100) %>%   kable()
 ```
 
 ---
@@ -511,9 +507,9 @@ d1 %>%
 Sentences containing "across the isle" or "side of the isle"  between `r min(d$date)` and `r max(d$date)`
 
 ```{r}
-d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "aisle") ) %>%
-  filter(sentence != "NA") %>% 
-  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+d1 <- d %>%mutate(sentence = map_chr(file, .f = keyword_sentence, word = "aisle") ) %>%
+  filter(sentence != "NA") %>%
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>%
   unnest(sentence)
 
 d1  %>%
@@ -521,9 +517,9 @@ d1  %>%
   aes(x = date) + 
   geom_bar() 
 
-d1 %>% 
-  select(date, sentence, header, url_txt) %>% 
-  head(100) %>%    kablebox()
+d1 %>%
+  select(date, sentence, header, url_txt) %>%
+  head(100) %>%   kable()
 ```
 
 ---
@@ -533,9 +529,9 @@ d1 %>%
 Sentences containing "my state" "my district" or "my constituent" between `r min(d$date)` and `r max(d$date)`
 
 ```{r}
-d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = "my district|my constituent|my state") ) %>%
-  filter(sentence != "NA") %>% 
-  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+d1 <- d %>%mutate(sentence = map_chr(file, .f = keyword_sentence, word = "my district|my constituent|my state") ) %>%
+  filter(sentence != "NA") %>%
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>%
   unnest(sentence)
 
 d1 %>%
@@ -543,9 +539,9 @@ d1 %>%
   aes(x = date) + 
   geom_bar() 
 
-d1 %>% 
-  select(date, sentence, header, url_txt) %>% 
-  head(100) %>%    kablebox()
+d1 %>%
+  select(date, sentence, header, url_txt) %>%
+  head(100) %>%   kable()
 ```
 
 ---
@@ -559,9 +555,9 @@ states <- str_c(state.name, collapse = "|")
 
 states <- str_c("(in|for) (", states, ")") # cant use "of Wisconsin" because it is an epithet
 
-d1 <- d %>% mutate(sentence = map_chr(file, .f = keyword_sentence, word = states) ) %>%
-  filter(sentence != "NA") %>% 
-  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>% 
+d1 <- d %>%mutate(sentence = map_chr(file, .f = keyword_sentence, word = states) ) %>%
+  filter(sentence != "NA") %>%
+  mutate(sentence = str_split(sentence, "\\.\\.\\.")) %>%
   unnest(sentence)
 
 d1 %>%
@@ -569,10 +565,10 @@ d1 %>%
   aes(x = date) +
   geom_bar() 
 
-d1 %>% 
-  select(date, sentence, header, url_txt) %>% #%>% pull(sentence)
-  head(100) %>% 
-  kablebox()
+d1 %>%
+  select(date, sentence, header, url_txt) %>%#%>%pull(sentence)
+  head(100) %>%
+  kable()
 ```
 
 ---

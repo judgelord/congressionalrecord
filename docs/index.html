@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scrape, parse, and analyze the Congressional Record • congressionalrecord</title>
+<title>Scrape, Parse, and Analyze the Congressional Record • congressionalrecord</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Scrape, parse, and analyze the Congressional Record">
+<script src="pkgdown.js"></script><meta property="og:title" content="Scrape, Parse, and Analyze the Congressional Record">
 <meta property="og:description" content="A suite of functions to scrape, parse, and analyze the U.S. Congressional Record.">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -89,8 +89,9 @@
   <div class="contents col-md-9">
 
 <div class="section level1">
-<div class="page-header"><h1 id="scrape-parse-and-analyze-the-congressional-record-">Scrape, parse, and analyze the Congressional Record
-<img src="reference/figures/logo.png" align="right" width="150"><a class="anchor" aria-label="anchor" href="#scrape-parse-and-analyze-the-congressional-record-"></a>
+<div class="page-header"><h1 id="congressionalrecord-scrape-parse-and-analyze-the-congressional-record-">congressionalrecord: Scrape, parse, and analyze the Congressional
+Record
+<img src="reference/figures/logo.png" align="right" width="150"><a class="anchor" aria-label="anchor" href="#congressionalrecord-scrape-parse-and-analyze-the-congressional-record-"></a>
 </h1></div>
 
 <div class="section level3">
@@ -141,7 +142,7 @@ text.</p>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 TSA; Congressional Record Vol. 153, No. 35                                         2007-03-01 senate-section https://www.congress.gov/congressional-record/volume-153/issue-35/senate-section/articl…</span></span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 FDA REGULATION OF TOBACCO; Congressional Record Vol. 153, No. 35                   2007-03-01 senate-section https://www.congress.gov/congressional-record/volume-153/issue-35/senate-section/articl…</span></span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 45 more rows</span></span></code></pre></div>
-<p>Scraper methods are described <a href="https://judgelord.github.io/congressionalrecord/scraper.html" class="external-link">here</a>
+<p>Scraper methods are described <a href="https://judgelord.github.io/congressionalrecord/articles/scraper.html" class="external-link">here</a>
 along with code for tables and figures to summarize theese metadata</p>
 <p><img src="reference/figures/cr_subtypes-1.png" style="display: block; margin: auto;"></p>
 <p>Crucial for second next step, these metadata include the URL to the
@@ -204,7 +205,7 @@ directory for dates that do not already appear in a “data/txt”
 directory. You may specify a custom vector of <code>dates</code> or
 <code>skip_parsed = FALSE</code> if you don’t want to skipped files
 already parsed.</li>
-<li>the parser methods are explained <a href="https://judgelord.github.io/congressionalrecord/speakers" class="external-link">here</a>
+<li>the parser methods are explained <a href="https://judgelord.github.io/congressionalrecord/articles/speakers.html" class="external-link">here</a>
 </li>
 </ul>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -215,11 +216,11 @@ already parsed.</li>
 <span class="fu"><a href="reference/parse_cr.html">parse_cr</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2007-03-01</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Typos fixed in 18 seconds</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Typos fixed in 17 seconds</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching  data for members of the 110th, n = 1208 (324 distinct strings).</span></span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Names matched in 8 seconds</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Names matched in 9 seconds</span></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Joining, by = c("congress", "pattern", "first_name", "last_name")</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -265,7 +266,7 @@ phrases<a class="anchor" aria-label="anchor" href="#3-count-and-extract-sentence
 <li>Preliminary work on feature extraction is <a href="https://judgelord.github.io/cr/features" class="external-link">here</a><br>
 </li>
 <li>There is also a brief tutorial on feature extraction at the end of
-the scraper vignette <a href="https://judgelord.github.io/congressionalrecord/scraper.html#Text_features" class="external-link">here</a>
+the scraper vignette <a href="https://judgelord.github.io/congressionalrecord/articles/scraper.html#Text_features" class="external-link">here</a>
 </li>
 </ul>
 <p><img src="reference/figures/covid-1.png"></p>

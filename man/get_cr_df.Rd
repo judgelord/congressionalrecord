@@ -5,7 +5,11 @@
 The main function to get metadata for the Congressional Record for a given date and section (e.g., "house-section" or "senate-section"). This metadata can then be provided to `get_cr_htm()` to download htm files for the desired sections.
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Scrape URLs for each subsection of the Congressional Record
+As we do so, we retain some helpful metadata
+
+This function puts linked text (`html_nodes("a")`), URLs (`html_attr("href")`) and their text (`html_text()`) for each date and each section of the record into a data frame.
+With `map_dfr` from the `purrr` package, it does this to a range of dates.
 }
 \usage{
 get_cr_df(date, section)
@@ -13,30 +17,33 @@ get_cr_df(date, section)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{date}{
-%%     ~~Describe \code{date} here~~
+A vector of dates to scrape in YYYY-MM-DD format
 }
   \item{section}{
-%%     ~~Describe \code{section} here~~
-}
+"senate-section", "house-section", "all"}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+
+
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+A data frame of URLs and metadata for the Congressional Record for specified date(s) and section(s)
 }
 \references{
-%% ~put references to the literature/web site here ~
+https://judgelord.github.io/congressionalrecord/
 }
 \author{
-%%  ~~who you are~~
-}
+Devin Judge-Lord}
 \note{
-%%  ~~further notes~~
+ - The record is divided by date
+ - The record is divided into three sections: Senate, House, Extensions of Remarks (text submitted to the record later)
+ - The page number ("S3253" is the 3,253rd page of the record, featuring remarks from the Senate)
+
+ The Congressional Record has a page for each day: https://www.congress.gov/congressional-record/2017/6/6/senate-section
+
+ On this page are URLs for each subsection. These URLs look like this:
+ https://www.congress.gov/congressional-record/2017/6/6/senate-section/article/S3253-6
+
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -45,9 +52,9 @@ get_cr_df(date, section)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+# example date and section
+date <- "2007/03/01"
+section <- "senate-section"
 
 ## The function is currently defined as
 function (date, section)

@@ -23,14 +23,15 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning=FALSE, 
                       message=FALSE)
 
-
-library(tidyverse)
+library(dplyr)
+library(tidyr)
 library(rvest)
 library(readr)
+library(stringr)
 library(magrittr)
 library(tidytext)
+library(tibble)
 library(knitr)
-library(kableExtra)
 library(here)
 library(crayon)
 
@@ -44,11 +45,11 @@ library(ggplot2); theme_set(theme_minimal())
   scale_fill_discrete <- function(...)
     scale_fill_viridis_d(...)
   
-kablebox <- . %>% 
+kable <- . %>% 
   head(100) %>%
   knitr::kable() %>% 
-  kable_styling() %>% 
-  scroll_box(height = "400px")
+  kableExtra::kable_styling() %>% 
+  kableExtra::scroll_box(height = "400px")
 ```
 
 This script outines approaches to extract textual features of interest from the Congressional Record. 
@@ -59,9 +60,7 @@ This script outines approaches to extract textual features of interest from the 
 
 ### Files
 
-> Testing with a sample of 1000 speeches for now
-
-```{r}
+```{r read_files}
 cr <- list.files(here::here("data", "txt"), recursive = T)
 
 d <- tibble(file = str_c("data/txt/", cr),
@@ -70,64 +69,52 @@ d <- tibble(file = str_c("data/txt/", cr),
        year = str_sub(cr, 1, 4),
        icpsr = str_remove_all(cr, ".*-|.txt"))
 
-kablebox(d)
-
-d %<>% filter(icpsr != "NA")
-
-# a function to grab sentences with keywords
-keyword_sentence <- function(file, word){
-  text <- read_lines(here::here(file)) %>% 
-    str_c(collapse = " ") %>% 
-    str_squish()
-  
-  if( str_detect(text, regex(word, ignore_case = T) ) ){
-     text %<>%
-      enframe(name = NULL, value = "text") %>%
-      unnest_tokens(sentence, text, token = "sentences") %>% 
-      filter(str_detect(sentence, word)) %>% 
-      .$sentence %>% 
-      str_c(collapse = "...")
-  } else {
-    text <- NA
-  }
-    
-  return(text)
-}
-
-## test 
-# keyword_sentence(d$file[1], "i am")
+d %>% head() %>% kable()
 ```
+
+
 
 ---
 
 ### Sentences containing "district"
 ```{r district}
+library(congressionalrecord) # import keword_sentences function
+
 d %<>% mutate(district_sentences = purrr::map_chr(d$file, keyword_sentence, word = "district"))
 
-d %>% filter(!is.na(district_sentences)) %>% kablebox()
+d %>% 
+  filter(!is.na(district_sentences)) %>% 
+  kable()
 ```
 
 ---
 
 ### Words most often proceeding "district"
 ```{r}
-
-
 d %>% mutate(district_preface = str_extract_all(district_sentences, "\\w+ district")) %>% 
-  unnest(district_preface) %>% count(district_preface, sort = T) %>% drop_na(district_preface) %>% kablebox()
+  unnest(district_preface) %>% 
+  count(district_preface, sort = T) %>% 
+  drop_na(district_preface) %>% 
+  kable()
 ```
 
 ---
 
 ### Number of speeches per legislator
 ```{r}
+library(legislators)
+data(members)
+
 d %>% add_count(icpsr, name = "Speeches") %>% 
+  mutate(icpsr = as.numeric(icpsr)) %>% 
   drop_na(district_sentences, icpsr) %>% 
   add_count(icpsr, name = "Speeches_with_district") %>%
   mutate(district_sentences = str_split(district_sentences, "\\.\\.\\.")) %>%
   unnest(district_sentences) %>% 
-  count(icpsr, Speeches, Speeches_with_district, name = "Total mentions of distirct") %>% 
-  kablebox()
+  count(date, icpsr, Speeches, Speeches_with_district, name = "Total mentions of distirct") %>% 
+  left_join(members %>% filter(congress == 110) %>% select(icpsr, congress, bioname, state_abbrev, district_code)) %>% 
+  distinct() %>% 
+  kable()
 ```
 
 

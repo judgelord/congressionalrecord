@@ -1,14 +1,6 @@
 
 # A script to parse congressional record text
-# Data scraped using this script: https://judgelord.github.io/cr/scraper.html
-
-library(tidyverse)
-library(here)
-library(readr)
-library(magrittr)
-library(tidytext)
-library(crayon)
-library(legislators)
+# Requires data scraped using functions in scraper.R
 
 
 ### 1. Metadata from file names in htm folder (from scraper)

@@ -110,9 +110,6 @@ interest from the Congressional Record.</p>
 <div class="section level3">
 <h3 id="files">Files<a class="anchor" aria-label="anchor" href="#files"></a>
 </h3>
-<blockquote>
-<p>Testing with a sample of 1000 speeches for now</p>
-</blockquote>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"data"</span>, <span class="st">"txt"</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 
@@ -122,1461 +119,72 @@ interest from the Congressional Record.</p>
        year <span class="op">=</span> <span class="fu">str_sub</span><span class="op">(</span><span class="va">cr</span>, <span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span>,
        icpsr <span class="op">=</span> <span class="fu">str_remove_all</span><span class="op">(</span><span class="va">cr</span>, <span class="st">".*-|.txt"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu">kablebox</span><span class="op">(</span><span class="va">d</span><span class="op">)</span></code></pre></div>
-<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; ">
-<table class="table table" style="margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-file
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-date
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-year
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-icpsr
-</th>
+<span class="va">d</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="75%">
+<col width="12%">
+<col width="5%">
+<col width="6%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">file</th>
+<th align="left">date</th>
+<th align="left">year</th>
+<th align="left">icpsr</th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10713/CREC-2007-03-01-pt1-PgE444-000140-10713.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10713
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10713/CREC-2007-03-01-pt1-PgE444-000141-10713.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10713
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10713/CREC-2007-03-01-pt1-PgH2118-000715-10713.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10713
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10808/CREC-2007-03-01-pt1-PgH2043-3-000397-10808.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10808
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2460-2-000940-10808.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10808
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2487-6-001014-10808.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10808
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2487-6-001015-10808.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10808
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2490-001059-10808.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10808
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2490-001060-10808.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10808
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2490-001062-10808.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10808
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2490-001063-10808.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10808
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2517-001133-10808.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10808
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2517-2-001100-10808.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-10808
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/1366/CREC-2007-03-01-pt1-PgS2460-2-000883-1366.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-1366
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14009/CREC-2007-03-01-pt1-PgS2487-6-001006-14009.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14009
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14009/CREC-2007-03-01-pt1-PgS2490-001043-14009.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14009
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14009/CREC-2007-03-01-pt1-PgS2490-001044-14009.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14009
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14053/CREC-2007-03-01-pt1-PgH2043-3-000437-14053.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14053
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14101/CREC-2007-03-01-pt1-PgS2517-001136-14101.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14101
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14101/CREC-2007-03-01-pt1-PgS2517-2-001103-14101.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14101
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14103/CREC-2007-03-01-pt1-PgS2487-6-001007-14103.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14103
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14103/CREC-2007-03-01-pt1-PgS2490-001045-14103.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14103
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14103/CREC-2007-03-01-pt1-PgS2490-001046-14103.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14103
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14213/CREC-2007-03-01-pt1-PgS2487-6-001009-14213.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14213/CREC-2007-03-01-pt1-PgS2487-6-001011-14213.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14213/CREC-2007-03-01-pt1-PgS2490-001049-14213.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14213/CREC-2007-03-01-pt1-PgS2490-001050-14213.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14213/CREC-2007-03-01-pt1-PgS2490-001053-14213.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14213/CREC-2007-03-01-pt1-PgS2490-001054-14213.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2460-2-000897-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2460-2-000899-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2476-2-000965-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2476-2-000966-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2476-2-000967-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2517-001123-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2517-001130-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2517-001139-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2517-2-001090-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2517-2-001097-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14226/CREC-2007-03-01-pt1-PgS2517-2-001106-14226.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000319-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000323-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000327-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000331-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000335-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000396-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000461-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000471-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000502-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000519-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000521-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000523-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000528-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14256/CREC-2007-03-01-pt1-PgH2043-3-000536-14256.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14256
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14265/CREC-2007-03-01-pt1-PgE451-000209-14265.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14265
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14265/CREC-2007-03-01-pt1-PgE451-000210-14265.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14265
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14265/CREC-2007-03-01-pt1-PgH2118-2-000670-14265.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14265
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14280/CREC-2007-03-01-pt1-PgH2118-2-000655-14280.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14280
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14280/CREC-2007-03-01-pt1-PgH2118-2-000656-14280.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14280
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14290/CREC-2007-03-01-pt1-PgE441-3-000098-14290.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14290
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14290/CREC-2007-03-01-pt1-PgE441-3-000099-14290.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14290
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14307/CREC-2007-03-01-pt1-PgS2480-000971-14307.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14307
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14307/CREC-2007-03-01-pt1-PgS2487-4-000993-14307.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14307
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14307/CREC-2007-03-01-pt1-PgS2487-4-000994-14307.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14307
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14307/CREC-2007-03-01-pt1-PgS2487-4-000995-14307.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14307
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14307/CREC-2007-03-01-pt1-PgS2487-5-000997-14307.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14307
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14400/CREC-2007-03-01-pt1-PgS2460-2-000894-14400.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14400
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14400/CREC-2007-03-01-pt1-PgS2460-2-000895-14400.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14400
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14400/CREC-2007-03-01-pt1-PgS2460-2-000929-14400.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14400
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14430/CREC-2007-03-01-pt1-PgH2043-3-000425-14430.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14430
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14435/CREC-2007-03-01-pt1-PgH2043-3-000436-14435.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14435
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14448/CREC-2007-03-01-pt1-PgE448-3-000179-14448.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14448
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14448/CREC-2007-03-01-pt1-PgE448-3-000180-14448.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14448
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14503/CREC-2007-03-01-pt1-PgS2443-000780-14503.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14503
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14503/CREC-2007-03-01-pt1-PgS2443-000782-14503.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14503
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14661/CREC-2007-03-01-pt1-PgS2484-000980-14661.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14661
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14675/CREC-2007-03-01-pt1-PgE440-5-000089-14675.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14675
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14675/CREC-2007-03-01-pt1-PgE440-5-000090-14675.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14675
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14675/CREC-2007-03-01-pt1-PgH2118-2-000699-14675.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14675
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14812/CREC-2007-03-01-pt1-PgS2460-2-000933-14812.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14812
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14812/CREC-2007-03-01-pt1-PgS2460-2-000934-14812.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14812
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14812/CREC-2007-03-01-pt1-PgS2460-2-000936-14812.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14812
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14812/CREC-2007-03-01-pt1-PgS2460-2-000938-14812.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14812
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14812/CREC-2007-03-01-pt1-PgS2517-001143-14812.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14812
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14812/CREC-2007-03-01-pt1-PgS2517-2-001110-14812.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14812
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14813/CREC-2007-03-01-pt1-PgH2043-3-000282-14813.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14813
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14813/CREC-2007-03-01-pt1-PgH2043-3-000283-14813.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14813
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14837/CREC-2007-03-01-pt1-PgE436-4-000056-14837.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14837
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14837/CREC-2007-03-01-pt1-PgE436-4-000057-14837.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14837
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2443-000786-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2443-000788-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2443-000791-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2443-000793-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2443-000795-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2443-000797-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2443-000799-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2443-000801-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2443-000803-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2443-000804-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-data/txt/2007/14858/CREC-2007-03-01-pt1-PgS2460-2-000850-14858.txt
-</td>
-<td style="text-align:left;">
-2007-03-01
-</td>
-<td style="text-align:left;">
-2007
-</td>
-<td style="text-align:left;">
-14858
-</td>
+<tr class="odd">
+<td align="left">data/txt/2007/10713/CREC-2007-03-01-pt1-PgE444-000140-10713.txt</td>
+<td align="left">2007-03-01</td>
+<td align="left">2007</td>
+<td align="left">10713</td>
+</tr>
+<tr class="even">
+<td align="left">data/txt/2007/10713/CREC-2007-03-01-pt1-PgE444-000141-10713.txt</td>
+<td align="left">2007-03-01</td>
+<td align="left">2007</td>
+<td align="left">10713</td>
+</tr>
+<tr class="odd">
+<td align="left">data/txt/2007/10713/CREC-2007-03-01-pt1-PgH2118-000715-10713.txt</td>
+<td align="left">2007-03-01</td>
+<td align="left">2007</td>
+<td align="left">10713</td>
+</tr>
+<tr class="even">
+<td align="left">data/txt/2007/10808/CREC-2007-03-01-pt1-PgH2043-3-000397-10808.txt</td>
+<td align="left">2007-03-01</td>
+<td align="left">2007</td>
+<td align="left">10808</td>
+</tr>
+<tr class="odd">
+<td align="left">data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2460-2-000940-10808.txt</td>
+<td align="left">2007-03-01</td>
+<td align="left">2007</td>
+<td align="left">10808</td>
+</tr>
+<tr class="even">
+<td align="left">data/txt/2007/10808/CREC-2007-03-01-pt1-PgS2487-6-001014-10808.txt</td>
+<td align="left">2007-03-01</td>
+<td align="left">2007</td>
+<td align="left">10808</td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">d</span> <span class="op">%&lt;&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">icpsr</span> <span class="op">!=</span> <span class="st">"NA"</span><span class="op">)</span>
-
-<span class="co"># a function to grab sentences with keywords</span>
-<span class="va">keyword_sentence</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span>, <span class="va">word</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">text</span> <span class="op">&lt;-</span> <span class="fu">read_lines</span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu">str_c</span><span class="op">(</span>collapse <span class="op">=</span> <span class="st">" "</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu">str_squish</span><span class="op">(</span><span class="op">)</span>
-  
-  <span class="kw">if</span><span class="op">(</span> <span class="fu">str_detect</span><span class="op">(</span><span class="va">text</span>, <span class="fu"><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex</a></span><span class="op">(</span><span class="va">word</span>, ignore_case <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span><span class="op">{</span>
-     <span class="va">text</span> <span class="op">%&lt;&gt;%</span>
-      <span class="fu">enframe</span><span class="op">(</span>name <span class="op">=</span> <span class="cn">NULL</span>, value <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-      <span class="fu">unnest_tokens</span><span class="op">(</span><span class="va">sentence</span>, <span class="va">text</span>, token <span class="op">=</span> <span class="st">"sentences"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">str_detect</span><span class="op">(</span><span class="va">sentence</span>, <span class="va">word</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="va">.</span><span class="op">$</span><span class="va">sentence</span> <span class="op">%&gt;%</span> 
-      <span class="fu">str_c</span><span class="op">(</span>collapse <span class="op">=</span> <span class="st">"..."</span><span class="op">)</span>
-  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-    <span class="va">text</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
-  <span class="op">}</span>
-    
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co">## test </span>
-<span class="co"># keyword_sentence(d$file[1], "i am")</span></code></pre></div>
 <hr>
 </div>
 <div class="section level3">
 <h3 id="sentences-containing-district">Sentences containing “district”<a class="anchor" aria-label="anchor" href="#sentences-containing-district"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">d</span> <span class="op">%&lt;&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>district_sentences <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">file</span>, <span class="va">keyword_sentence</span>, word <span class="op">=</span> <span class="st">"district"</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://judgelord.github.io/congressionalrecord/" class="external-link">congressionalrecord</a></span><span class="op">)</span> <span class="co"># import keword_sentences function</span>
 
-<span class="va">d</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">district_sentences</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">kablebox</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="va">d</span> <span class="op">%&lt;&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>district_sentences <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">file</span>, <span class="va">keyword_sentence</span>, word <span class="op">=</span> <span class="st">"district"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">d</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">district_sentences</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; ">
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -2220,9 +828,12 @@ process in the workplace.
 <div class="section level3">
 <h3 id="words-most-often-proceeding-district">Words most often proceeding “district”<a class="anchor" aria-label="anchor" href="#words-most-often-proceeding-district"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>district_preface <span class="op">=</span> <span class="fu">str_extract_all</span><span class="op">(</span><span class="va">district_sentences</span>, <span class="st">"\\w+ district"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">unnest</span><span class="op">(</span><span class="va">district_preface</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">count</span><span class="op">(</span><span class="va">district_preface</span>, sort <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">drop_na</span><span class="op">(</span><span class="va">district_preface</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">kablebox</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+  <span class="fu">unnest</span><span class="op">(</span><span class="va">district_preface</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">count</span><span class="op">(</span><span class="va">district_preface</span>, sort <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">drop_na</span><span class="op">(</span><span class="va">district_preface</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; ">
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -2474,18 +1085,27 @@ wyoming district
 <div class="section level3">
 <h3 id="number-of-speeches-per-legislator">Number of speeches per legislator<a class="anchor" aria-label="anchor" href="#number-of-speeches-per-legislator"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">d</span> <span class="op">%&gt;%</span> <span class="fu">add_count</span><span class="op">(</span><span class="va">icpsr</span>, name <span class="op">=</span> <span class="st">"Speeches"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://judgelord.github.io/legislators/" class="external-link">legislators</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">members</span><span class="op">)</span>
+
+<span class="va">d</span> <span class="op">%&gt;%</span> <span class="fu">add_count</span><span class="op">(</span><span class="va">icpsr</span>, name <span class="op">=</span> <span class="st">"Speeches"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">mutate</span><span class="op">(</span>icpsr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">icpsr</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">drop_na</span><span class="op">(</span><span class="va">district_sentences</span>, <span class="va">icpsr</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">add_count</span><span class="op">(</span><span class="va">icpsr</span>, name <span class="op">=</span> <span class="st">"Speeches_with_district"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>district_sentences <span class="op">=</span> <span class="fu">str_split</span><span class="op">(</span><span class="va">district_sentences</span>, <span class="st">"\\.\\.\\."</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">unnest</span><span class="op">(</span><span class="va">district_sentences</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">count</span><span class="op">(</span><span class="va">icpsr</span>, <span class="va">Speeches</span>, <span class="va">Speeches_with_district</span>, name <span class="op">=</span> <span class="st">"Total mentions of distirct"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kablebox</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+  <span class="fu">count</span><span class="op">(</span><span class="va">date</span>, <span class="va">icpsr</span>, <span class="va">Speeches</span>, <span class="va">Speeches_with_district</span>, name <span class="op">=</span> <span class="st">"Total mentions of distirct"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">left_join</span><span class="op">(</span><span class="va">members</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">congress</span> <span class="op">==</span> <span class="fl">110</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">icpsr</span>, <span class="va">congress</span>, <span class="va">bioname</span>, <span class="va">state_abbrev</span>, <span class="va">district_code</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">distinct</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; ">
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 icpsr
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
@@ -2497,10 +1117,25 @@ Speeches_with_district
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 Total mentions of distirct
 </th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+congress
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+bioname
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+state_abbrev
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+district_code
+</th>
 </tr></thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 14103
 </td>
 <td style="text-align:right;">
@@ -2512,9 +1147,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+DOMENICI, Pete Vichi
+</td>
+<td style="text-align:left;">
+NM
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 14213
 </td>
 <td style="text-align:right;">
@@ -2526,9 +1176,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+DODD, Christopher John
+</td>
+<td style="text-align:left;">
+CT
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 14226
 </td>
 <td style="text-align:right;">
@@ -2540,9 +1205,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+GRASSLEY, Charles Ernest
+</td>
+<td style="text-align:left;">
+IA
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 14256
 </td>
 <td style="text-align:right;">
@@ -2554,9 +1234,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+MILLER, George
+</td>
+<td style="text-align:left;">
+CA
+</td>
+<td style="text-align:right;">
+7
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 14307
 </td>
 <td style="text-align:right;">
@@ -2568,9 +1263,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 5
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+LEAHY, Patrick Joseph
+</td>
+<td style="text-align:left;">
+VT
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 14837
 </td>
 <td style="text-align:right;">
@@ -2582,9 +1292,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 11
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+LANTOS, Thomas Peter
+</td>
+<td style="text-align:left;">
+CA
+</td>
+<td style="text-align:right;">
+12
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 14912
 </td>
 <td style="text-align:right;">
@@ -2596,9 +1321,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 3
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+BINGAMAN, Jesse Francis, Jr. (Jeff)
+</td>
+<td style="text-align:left;">
+NM
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 15005
 </td>
 <td style="text-align:right;">
@@ -2610,9 +1350,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+BERMAN, Howard Lawrence
+</td>
+<td style="text-align:left;">
+CA
+</td>
+<td style="text-align:right;">
+28
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 15429
 </td>
 <td style="text-align:right;">
@@ -2624,9 +1379,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 2
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+KYL, Jon Llewellyn
+</td>
+<td style="text-align:left;">
+AZ
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 15704
 </td>
 <td style="text-align:right;">
@@ -2638,9 +1408,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 3
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+LIEBERMAN, Joseph I.
+</td>
+<td style="text-align:left;">
+CT
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20138
 </td>
 <td style="text-align:right;">
@@ -2652,9 +1437,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+WILSON, Addison Graves (Joe)
+</td>
+<td style="text-align:left;">
+SC
+</td>
+<td style="text-align:right;">
+2
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20355
 </td>
 <td style="text-align:right;">
@@ -2666,9 +1466,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 3
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+BURGESS, Michael C.
+</td>
+<td style="text-align:left;">
+TX
+</td>
+<td style="text-align:right;">
+26
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20358
 </td>
 <td style="text-align:right;">
@@ -2680,9 +1495,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 3
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+MEEK, Kendrick B.
+</td>
+<td style="text-align:left;">
+FL
+</td>
+<td style="text-align:right;">
+17
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20501
 </td>
 <td style="text-align:right;">
@@ -2694,9 +1524,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+COSTA, Jim
+</td>
+<td style="text-align:left;">
+CA
+</td>
+<td style="text-align:right;">
+20
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20701
 </td>
 <td style="text-align:right;">
@@ -2708,9 +1553,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+GIFFORDS, Gabrielle
+</td>
+<td style="text-align:left;">
+AZ
+</td>
+<td style="text-align:right;">
+8
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20704
 </td>
 <td style="text-align:right;">
@@ -2722,9 +1582,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+LAMBORN, Doug
+</td>
+<td style="text-align:left;">
+CO
+</td>
+<td style="text-align:right;">
+5
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20710
 </td>
 <td style="text-align:right;">
@@ -2736,9 +1611,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 2
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+MAHONEY, Tim
+</td>
+<td style="text-align:left;">
+FL
+</td>
+<td style="text-align:right;">
+16
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20713
 </td>
 <td style="text-align:right;">
@@ -2750,9 +1640,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+HIRONO, Mazie
+</td>
+<td style="text-align:left;">
+HI
+</td>
+<td style="text-align:right;">
+2
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20723
 </td>
 <td style="text-align:right;">
@@ -2764,9 +1669,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+YARMUTH, John
+</td>
+<td style="text-align:left;">
+KY
+</td>
+<td style="text-align:right;">
+3
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20732
 </td>
 <td style="text-align:right;">
@@ -2778,9 +1698,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+HODES, Paul
+</td>
+<td style="text-align:left;">
+NH
+</td>
+<td style="text-align:right;">
+2
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20740
 </td>
 <td style="text-align:right;">
@@ -2792,9 +1727,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 4
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+SUTTON, Betty
+</td>
+<td style="text-align:left;">
+OH
+</td>
+<td style="text-align:right;">
+13
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 20745
 </td>
 <td style="text-align:right;">
@@ -2806,9 +1756,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+MURPHY, Patrick
+</td>
+<td style="text-align:left;">
+PA
+</td>
+<td style="text-align:right;">
+8
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 21993
 </td>
 <td style="text-align:right;">
@@ -2820,9 +1785,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 8
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+NORTON, Eleanor Holmes
+</td>
+<td style="text-align:left;">
+DC
+</td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 29132
 </td>
 <td style="text-align:right;">
@@ -2834,9 +1814,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+ANDREWS, Robert Ernest
+</td>
+<td style="text-align:left;">
+NJ
+</td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 29339
 </td>
 <td style="text-align:right;">
@@ -2848,9 +1843,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 5
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+BISHOP, Sanford Dixon, Jr. 
+</td>
+<td style="text-align:left;">
+GA
+</td>
+<td style="text-align:right;">
+2
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 29373
 </td>
 <td style="text-align:right;">
@@ -2862,9 +1872,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+MENENDEZ, Robert
+</td>
+<td style="text-align:left;">
+NJ
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 29524
 </td>
 <td style="text-align:right;">
@@ -2876,9 +1901,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 2
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+TIAHRT, Todd
+</td>
+<td style="text-align:left;">
+KS
+</td>
+<td style="text-align:right;">
+4
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 29541
 </td>
 <td style="text-align:right;">
@@ -2890,9 +1930,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 2
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+FRELINGHUYSEN, Rodney P.
+</td>
+<td style="text-align:left;">
+NJ
+</td>
+<td style="text-align:right;">
+11
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 29561
 </td>
 <td style="text-align:right;">
@@ -2904,9 +1959,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+DOYLE, Michael F.
+</td>
+<td style="text-align:left;">
+PA
+</td>
+<td style="text-align:right;">
+14
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 29576
 </td>
 <td style="text-align:right;">
@@ -2918,9 +1988,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+DAVIS, Thomas M., III
+</td>
+<td style="text-align:left;">
+VA
+</td>
+<td style="text-align:right;">
+11
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 29776
 </td>
 <td style="text-align:right;">
@@ -2932,9 +2017,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 5
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+MEEKS, Gregory W.
+</td>
+<td style="text-align:left;">
+NY
+</td>
+<td style="text-align:right;">
+6
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 29901
 </td>
 <td style="text-align:right;">
@@ -2946,9 +2046,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 2
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+THOMPSON, Michael
+</td>
+<td style="text-align:left;">
+CA
+</td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 29925
 </td>
 <td style="text-align:right;">
@@ -2960,9 +2075,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+CROWLEY, Joseph
+</td>
+<td style="text-align:left;">
+NY
+</td>
+<td style="text-align:right;">
+7
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 39301
 </td>
 <td style="text-align:right;">
@@ -2974,9 +2104,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+CLYBURN, James Enos
+</td>
+<td style="text-align:left;">
+SC
+</td>
+<td style="text-align:right;">
+6
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 40305
 </td>
 <td style="text-align:right;">
@@ -2988,9 +2133,24 @@ Total mentions of distirct
 <td style="text-align:right;">
 3
 </td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:left;">
+CORNYN, John
+</td>
+<td style="text-align:left;">
+TX
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
+2007-03-01
+</td>
+<td style="text-align:right;">
 40500
 </td>
 <td style="text-align:right;">
@@ -3002,117 +2162,17 @@ Total mentions of distirct
 <td style="text-align:right;">
 1
 </td>
-</tr>
-<tr>
+<td style="text-align:right;">
+110
+</td>
 <td style="text-align:left;">
-BARTLETT
+SALAZAR, Kenneth Lee
 </td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
 <td style="text-align:left;">
-BERKLEY
+CO
 </td>
 <td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-HALL
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-HASTINGS
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-header :::
-</td>
-<td style="text-align:right;">
-171
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-JORDAN
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-NORTON
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-SMITH
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
+0
 </td>
 </tr>
 </tbody>

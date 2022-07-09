@@ -24,17 +24,14 @@ knitr::opts_chunk$set(echo = TRUE,
                       message=FALSE)
 
 
-library(tidyverse)
-library(purrr)
-library(here)
-library(rvest)
-library(readr)
+
+# TODO remove magritter?
 library(magrittr)
-library(tidytext)
-library(knitr)
-library(kableExtra)
-library(here)
-library(crayon)
+library(dplyr)
+library(stringr)
+library(purrr)
+library(tidyr)
+# library(tidytext)
 
 library(ggplot2); theme_set(theme_minimal())
   options(
@@ -46,39 +43,44 @@ library(ggplot2); theme_set(theme_minimal())
   scale_fill_discrete <- function(...)
     scale_fill_viridis_d(...)
   
-kablebox <- . %>% 
-  head(100) %>%
-  knitr::kable() %>% 
-  kable_styling() %>% 
-  scroll_box(height = "400px")
+kable <- function(x){ 
+  head(x, 100) |>
+  knitr::kable() |> 
+  kableExtra::kable_styling() |> 
+  kableExtra::scroll_box(height = "400px")
+}
 ```
 
-# Data scraped in [scraper vignette](articles/scraper.html).
+## Data scraped in [scraper vignette](scraper.html).
 
-# Parse the Congressional Record
+# Steps to parse the Congressional Record
 
 ### 0. Metadata from html
-```{r html-metadata, cache = TRUE}
+
+```{r html-metadata}
 library(congressionalrecord)
+
 # Note, we don't need this metadata to parse the files
 # metadata
 load(here::here("data", "cr_metadata.Rdata"))
 
 # clean up data for plot clarity
 cr_metadata %<>% 
-  mutate(year = str_sub(date, 1,4) %>% as.numeric(),
-         chamber = section %>% 
-           str_remove("-.*") %>% 
-           str_to_title() %>%
+  mutate(year = str_sub(date, 1,4) |> as.numeric(),
+         chamber = section |> 
+           str_remove("-.*") |> 
+           str_to_title() |>
            str_replace("Extensions", "Extensions of Remarks")) 
+
+cr_metadata |> kable()
 ```
 
 
 ### 1. Metadata from file names
 
-```{r file-metadata, cache=TRUE}
+```{r file-metadata}
 # directory for bulk cr files 
-bulk_directory <- here::here("data", "htm") #%>% str_replace("cr", "cr_bulk")
+bulk_directory <- here::here("data", "htm") #|> str_replace("cr", "cr_bulk")
 
 # load cr text file names
 cr_file <- list.files(bulk_directory)
@@ -89,57 +91,41 @@ file.size(here::here("data", "htm", cr_file[1:10] ))
 
 # extract date from file name
 cr <- tibble(file = cr_file,
-            year = str_extract(cr_file, "[0-9]{4}") %>% as.numeric(),
-            date = str_extract(cr_file, "[0-9]{4}-[0-9]{2}-[0-9]{2}") %>% 
+            year = str_extract(cr_file, "[0-9]{4}") |> as.numeric(),
+            date = str_extract(cr_file, "[0-9]{4}-[0-9]{2}-[0-9]{2}") |> 
               as.Date() ) 
 
 # get congress from year 
 cr %<>% mutate(congress = as.numeric(round((year - 2001.1)/2)) + 107) # the 107th congress began in 2001
 
 # extract chamber from URL 
-cr %<>% mutate(chamber = str_extract(file, "Pg.") %>% 
-                str_remove("Pg") %>%
-                str_replace("E", "Extensions of Remarks") %>% 
-                str_replace("H", "House") %>% 
+cr %<>% mutate(chamber = str_extract(file, "Pg.") |> 
+                str_remove("Pg") |>
+                str_replace("E", "Extensions of Remarks") |> 
+                str_replace("H", "House") |> 
                 str_replace("S", "Senate") )
 
 # reconstruct URLs from file names
 cr %<>% mutate(url_txt = str_c("https://www.congress.gov/", congress, "/crec/", 
-                              date %>% str_replace_all("-", "/"), 
+                              date |> str_replace_all("-", "/"), 
                           "/modified/", 
                           file))
 ```
 
 
 
-### 2. Read in text
+### 2. Read in header text with `head_text()`
 
 > NOTE: I'm just using a sample of documents for now.
 
 ```{r}
-library(congressionalrecord)
-d <- cr
-
-#FIXME
 # just using a few documents for now
-
-d %<>% top_n(2, date)
-
-# d <- slice_head(cr, n = 30)
-# /FIXME
-
-
-
-
-## test
-# file <- d$file[1]
-# head_text(file)
-# all_text(file)
+d <- cr |> dplyr::top_n(2, date)
 
 congressionalrecord::head_text(d$file[1])
 
 # the first bit of text
-d$text_head <- d$file %>% map_chr(possibly(congressionalrecord::head_text, otherwise = "")) 
+d$text_head <- d$file |> map_chr(possibly(congressionalrecord::head_text, otherwise = "")) 
 
 # fill in procedural roles
 d %<>% 
@@ -148,7 +134,7 @@ d %<>%
 
 
 # order by date (just for presentation)
-d %<>% arrange(date) %>% arrange(rev(date))
+d %<>% arrange(date) |> arrange(rev(date))
 ```
 
 
@@ -157,12 +143,8 @@ d %<>% arrange(date) %>% arrange(rev(date))
 
 ```{r extract}
 # Extract speaker names
-## Test
-# file <- d$file[22]
-# extract_names(d$file[22])
-
 d %<>%
-  mutate(speaker = file %>% map_chr(possibly(extract_names, otherwise = "404error"))) %>% 
+  mutate(speaker = file |> map_chr(possibly(congressionalrecord::extract_names, otherwise = "404error"))) |> 
   mutate(speaker = ifelse(speaker == "", "404error", speaker))
 
 dim(d)
@@ -172,50 +154,46 @@ dim(d)
 
 #### Multiple speakers?
 
-```{r, cache=FALSE}
-d %>% 
-  filter(str_detect(speaker, ";")) %>% 
-  select(speaker, url_txt) %>% kablebox()
+```{r}
+d |> 
+  filter(str_detect(speaker, ";")) |> 
+  select(speaker, url_txt) |> 
+  kable()
 ```
 
 ---
 
 #### No speaker? 
 
-```{r, cache=FALSE}
-d %>% 
-  filter(is.na(speaker)|speaker == "404error") %>% 
-  select(speaker,  text_head, url_txt) %>% kablebox()
+```{r}
+# select observations where speaker is NA or missing
+d |> 
+  filter(is.na(speaker)|speaker == "404error") |> 
+  select(speaker, text_head, url_txt) |> 
+  kable()
 ```
 
 
 ### 4. Parse texts with multiple speakers with `parse_text()`
 
 ```{r}
-# for testing
-# speaker_list <- d$speaker[22] 
-# file <- d$file[22]
 
-## test
-# parse(d$speaker[30], d$file[30])
+d <- d |> head() |> congressionalrecord::parse_text()
 
-
-dim(d)
-d %<>% parse_text()
-
-d %>% 
-  filter(!speaker == "404error", 
-         !is.na(speaker) ) %>% 
-  select(speaker, text_head, url_txt) %>% kablebox()
+d |> 
+  filter(!speaker == "404error", !is.na(speaker) ) |>  
+  select(speaker, text_head, url_txt) |> 
+  kable()
 ```
 
 ---
 
 ### Most frequent speakers from `r min(d$date)` to `r max(d$date)`
 
-```{r, cache=FALSE}
-d %>% 
-  count(speaker, sort = T) %>% kablebox()
+```{r}
+d |> 
+  count(speaker, sort = T) |> 
+  kable()
 ```
 
 
@@ -232,8 +210,8 @@ d %<>% mutate(congress = as.numeric(round((year - 2001.1)/2)) + 107) # the 107th
 d %<>% mutate(chamber = ifelse(
   chamber == "Extensions of Remarks" &
     str_detect(text_head, "(Mr|Mrs|Ms|Miss)\\. Speaker\\,|in the house of representatives"), "House", "Senate"),
-              speaker = speaker %>% 
-    str_remove("(^|;)(Mr|Mrs|Ms|Miss|HON)(\\.| )") %>% 
+              speaker = speaker |> 
+    str_remove("(^|;)(Mr|Mrs|Ms|Miss|HON)(\\.| )") |> 
     str_squish())
 
 d %<>% mutate(speaker =
@@ -245,11 +223,12 @@ d %<>% mutate(speaker =
 # fixme this is a artifact of extractmembername's original use
 d %<>% mutate(agency = congress)
 
-d1 <- d %>% extractMemberName(col_name = "speaker", members = members)
+d1 <- d |> extractMemberName(col_name = "speaker", members = members)
 
-d1 %>% 
-  select(speaker, bioname, icpsr, chamber) %>%
-  distinct() %>% kablebox()
+d1 |> 
+  select(speaker, bioname, icpsr, chamber) |>
+  distinct() |> 
+  kable()
 ```
 
 
@@ -261,7 +240,7 @@ d1 %>%
 # cr_date <- "2018-02-06"
 
 ## Many days of the CR (e.g. feburary 2020)
-dates <- cr %>% #filter(str_detect(date, "2016-02")) %>% 
+dates <- cr |> #filter(str_detect(date, "2016-02")) |> 
   distinct(date)
 # cr_date <- dates$date[1]
 
@@ -269,7 +248,7 @@ dates <- cr %>% #filter(str_detect(date, "2016-02")) %>%
 # cr_write("2020-02-06")
 
 ## Many days of the CR (e.g. feburary 2020)
-dates <- cr %>% #filter(str_detect(date, "2016-02")) %>% 
+dates <- cr |> #filter(str_detect(date, "2016-02")) |> 
   distinct(date)
 
 # Testing 
@@ -285,18 +264,19 @@ walk(dates$date, cr_write)
 ```{r}
 # fill in empty
 d1 %<>% 
-  mutate(file = file %>% replace_na("CREC-missing"),
-         icpsr = icpsr %>% as.integer() %>% replace_na(00000))
+  mutate(file = file |> replace_na("CREC-missing"),
+         icpsr = icpsr |> as.integer() |> replace_na(00000))
 
 d1 %<>% mutate(path = str_c("data", 
                "txt", 
                year, 
                icpsr, 
-               str_c(file %>% str_remove(".htm"), 
+               str_c(file |> str_remove(".htm"), 
                      "-", match_id, "-", icpsr, ".txt"),
                sep = "/"  ))
 
-d1 %>% 
-  select(bioname, path) %>% kablebox()
+d1 |> 
+  select(bioname, path) |> 
+  kable()
 ```
 
