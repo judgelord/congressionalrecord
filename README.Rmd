@@ -51,36 +51,50 @@ library(legislators)
 
 # Usage
 
-This package contains functions to do three things:
+This package contains functions to do three things: (1) scrape, (2) parse, and (3) analyze the Congressional Record
 
-### 1. Scrape the text of the congressional record and metadata from congress.gov
+### 1. Scrape metadata from congress.gov and download the text of the Congressional Record
 
-- `scraper.R` contains functions to scrape sections of the record and save them as htm files in a directory. `get_cr_df()` first scrapes metadata for all subsections for each day of the record, including headers and links to the raw text. `get_cr_htm()` then downloads the raw text of each subsection as a .htm file to a "data/htm" directory. 
-- scraper methods are described [here](https://judgelord.github.io/congressionalrecord/scraper.html)
+There are two main scraper functions to (1) scrape metadata on sections of the record (e.g. "house-section" or "sentate-section"), including URLs to the raw text for that section and then (2) save them as htm files in a directory.
+
+`get_cr_df()` first scrapes metadata for all subsections for each day of the record, including headers and links to the raw text. 
 
 ```{r}
 cr_metadata <- get_cr_df(as.Date("2007/03/01"), section = "senate-section")
 
 cr_metadata
-
-cr_metadata$url[1]
-
-get_cr_htm(cr_metadata$url[1])
-
-read_html(here::here("data", "htm", "CREC-2007-03-01-pt1-PgS2437.htm")) 
 ```
 
-![](vignettes/figs/cr_subtypes-1.png)
+Scraper methods are described [here](https://judgelord.github.io/congressionalrecord/scraper.html) along with code for tables and figures to summarize theese metadata
+
+```{r, echo= FALSE}
+knitr::include_graphics("man/figures/cr_subtypes-1.png")
+```
+
+Crucial for second next step, these metadata include the URL to the full text. We could download it in PDF or HTML, but those formats take up more space than plain text without adding much value. (Indeed, PDFs are harder to work with.) 
+
+Paste one of these URLs into your browser and click on "View TXT in new window" to see what we will be downloading: 
+
+```{r}
+# URL to raw text .htm
+head(cr_metadata$url)
+```
+
+`get_cr_htm()` then downloads the raw text of each subsection as a .htm file. By default, `get_cr_htm()` downloads to a "data/htm" directory. In future versions, users will be able to provide a different location to the `directory` argument.  
+
+```{r}
+# download raw text .htm file
+get_cr_htm(cr_metadata$url[1])
+
+# this is what the raw text file "data/htm/CREC-2007-03-01-pt1-PgS2437.htm" looks like
+readLines(here::here("data", "htm", "CREC-2007-03-01-pt1-PgS2437.htm")) 
+```
+
 
 ### 2. Parse the record into .txt files by speaker
 
-- `parser.R` contains functions to parse htm sections of the record by speaker and tag members with their ICPSR ID numbers. By default, `parse_cr()` will parse all htm files in the "data/htm" directory for dates that do not already appear in a "data/txt" directory. You may specify a custom vector of `dates` or `skip_parsed = FALSE` if you don't want to skipped files already parsed.
+- The next set of functions to parse htm sections of the record by speaker and tag members with their ICPSR ID numbers. By default, `parse_cr()` will parse all htm files in the "data/htm" directory for dates that do not already appear in a "data/txt" directory. You may specify a custom vector of `dates` or `skip_parsed = FALSE` if you don't want to skipped files already parsed.
 - the parser methods are explained [here](https://judgelord.github.io/congressionalrecord/speakers)
-- `count_speeches.R` contains methods to count speeches per member
-- summary tables and figures of speech counts are [here](https://judgelord.github.io/cr/summary.html)
-- the parsed .txt directory looks like this:
-
-![](man/figures/winstat.png)
 
 ```{r}
 # default location where txt files will be saved
@@ -89,21 +103,41 @@ directory <- here::here("data", "txt")
 # parse congressional record htm files by speaker
 parse_cr()
 
-parsed_cr <- list.files(directory, recursive = T) |> head()
+parsed_cr <- list.files(directory, recursive = T)
 
-parsed_cr
-
-readLines(here::here(directory, parsed_cr[1])) 
+head(parsed_cr)
 ```
 
-Speeches by John Conyers are in folder "10713" (his ICPSR number).
+- the parsed .txt directory looks like this:
+
+![](man/figures/winstat.png)
+
+Speeches by John Conyers are in folder "10713" (his ICPSR number)
+
+```{r}
+readLines(here::here(directory, parsed_cr[1])) 
+
+readLines(here::here(directory, parsed_cr[2])) 
+
+readLines(here::here(directory, parsed_cr[3])) 
+
+```
+
+Speeches by Ted Kennedy are in folder "10808" (his ICPSR number)
+
+```{r}
+readLines(here::here(directory, parsed_cr[4])) 
+```
+
+- `count_speeches.R` contains additional methods to count speeches per member that will be included in future versions of `congressionalrecord`
+- summary tables and figures of speech counts are [here](https://judgelord.github.io/cr/summary.html)
 
 ---
 
 ### 3. Count and extract sentences that contain user-specified phrases
 
 - Preliminary work on feature extraction is [here](https://judgelord.github.io/cr/features)  
-- There is also a brief tutorial on feature extraction at the end of the scraper docs [here](https://judgelord.github.io/congressionalrecord/scraper.html#Text_features)
+- There is also a brief tutorial on feature extraction at the end of the scraper vignette [here](https://judgelord.github.io/congressionalrecord/scraper.html#Text_features)
 
 ![](man/figures/covid-1.png)
 
