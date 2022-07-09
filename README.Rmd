@@ -25,11 +25,8 @@ library(rvest)
 
 
 
-# Scrape, parse, and analyze the Congressional Record <img src="man/figures/logo.png" width="200" />
+# Scrape, parse, and analyze the Congressional Record <img src="man/figures/logo.png" width="150" />
 
-  <!-- badges: start -->
-  [![CRAN status](https://www.r-pkg.org/badges/version/congressionalrecord)](https://CRAN.R-project.org/package=congressionalrecord)
-  <!-- badges: end -->
 
 ### Installation
 ```

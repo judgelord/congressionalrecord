@@ -3,3 +3,6 @@
 ^vignettes$
 ^hex$
 ^LICENSE\.md$
+^txt$
+^htm$
+$cr_metadata\.rda$
