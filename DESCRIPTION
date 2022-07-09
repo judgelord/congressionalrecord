@@ -1,6 +1,6 @@
 Package: congressionalrecord
 Type: Package
-Title: Scrape, parse, and analyze the Congressional Record
+Title: Scrape, Parse, and Analyze the Congressional Record
 Version: 0.0.1
 Authors@R: 
     c(person(given = "Devin",
@@ -26,6 +26,7 @@ Imports:
 	here,
 	readr,
 	xml2,
+	tidytext,
 	legislators
 Depends: 
     R (>= 3.5.0)

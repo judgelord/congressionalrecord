@@ -1,9 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Scrape, parse, and analyze the Congressional Record
+# Scrape, parse, and analyze the Congressional Record <img src="man/figures/logo.png" align = "right" width="150" />
 
-<img src="man/figures/logo.png" width="150" />
+[![CRAN
+status](https://www.r-pkg.org/badges/version/congressionalrecord)](https://CRAN.R-project.org/package=congressionalrecord)
 
 ### Installation
 
@@ -152,7 +153,7 @@ parse_cr()
 
     #> Searching  data for members of the 110th, n = 1208 (324 distinct strings).
 
-    #> Names matched in 9 seconds
+    #> Names matched in 8 seconds
 
     #> Joining, by = c("congress", "pattern", "first_name", "last_name")
 

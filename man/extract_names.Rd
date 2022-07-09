@@ -2,7 +2,7 @@
 \alias{extract_names}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-A wrapper for `legislators::extractMemberName()` designed to improve matching speakers in Congressional Record text.}
+A helper function to extract speakers in the Congressional Record using a regular expression to match how the Record notes speakers.}
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
@@ -12,18 +12,13 @@ extract_names(file)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{file}{
-%%     ~~Describe \code{file} here~~
-}
+A file path}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+A character string (a regular expression) of speaker names detected in the text of the provided file
 }
 \references{
 %% ~put references to the literature/web site here ~

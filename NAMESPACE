@@ -1,2 +1,2 @@
-import("magrittr", "crayon", "dplyr", "stringr", "tidyr", "purrr",  "rvest", "here", "readr", "xml2", "legislators")
+import("magrittr", "crayon", "dplyr", "stringr", "tidyr", "purrr",  "rvest", "here", "readr", "xml2", "legislators", "tidytext")
 export("get_cr_df", "get_cr_htm", "head_text", "all_text", "extract_names", "escape_specials", "parse", "parse_text", "make_dir", "write_cr", "parse_cr", "congress_years")
