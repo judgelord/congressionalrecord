@@ -1,49 +1,6 @@
 
-# A script to parse congressional record text
+# Functions to parse congressional record text
 # Requires data scraped using functions in scraper.R
-
-
-### 1. Metadata from file names in htm folder (from scraper)
-bulk_directory = here::here("data", "htm")
-
-# load cr text file names
-cr_file <- list.files(bulk_directory)
-
-# in case we need to filter out small, corrupted files
-# file.size(here::here("data", "htm", cr_file[1:10] ))
-# cr %<>% filter(file.info)
-
-# extract date from file name
-cr <- tibble(file = cr_file,
-             year = str_extract(cr_file, "[0-9]{4}") %>% as.numeric(),
-             date = str_extract(cr_file, "[0-9]{4}-[0-9]{2}-[0-9]{2}") %>%
-               as.Date() )
-
-# order by date
-cr %<>% arrange(date) %>% arrange(rev(date))
-
-
-# get congress from year
-cr %<>% mutate(congress = as.numeric(round((year - 2001.1)/2)) + 107) # the 107th congress began in 2001
-
-# extract chamber from URL
-cr %<>% mutate(chamber = str_extract(file, "Pg.") %>%
-                 str_remove("Pg") %>%
-                 str_replace("E", "Extensions of Remarks") %>%
-                 str_replace("H", "House") %>%
-                 str_replace("S", "Senate") )
-
-# reconstruct URLs from file names
-cr %<>% mutate(url_txt = str_c("https://www.congress.gov/", congress, "/crec/",
-                               date %>% str_replace_all("-", "/"),
-                               "/modified/",
-                               file))
-
-
-
-
-
-# FUNCTIONS
 
 ### 2. Functions to read in text
 

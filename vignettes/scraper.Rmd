@@ -121,12 +121,18 @@ The "View TXT in new window" URL takes us to a .htm file of just the congression
 `html_session() %>%follow_link("View TXT in new window")` takes us to the raw TXT page. With `walk` from the `purrr` package, we can download each raw txt page to a file with the same name.
 
 ```{r download_htm, eval = FALSE}
-# Identify files already downloaded 
+# Identify files already downloaded
 downloaded <- list.files(here::here("data", "htm"))
 length(downloaded)
 
+# if it does not already exist 
+dir.create(here::here("data"))
+dir.create(here::here("data", "htm"))
+
+cr_to_get <- cr_metadata %>% filter(!downloaded)
+
 # download file for each url 
-walk(cr_metadata$url, get_cr_htm)
+walk(cr_to_get$url, get_cr_htm)
 ```
 
 TXT pages look like this: https://www.congress.gov/115/crec/2017/06/06/modified/CREC-2017-06-06-pt1-PgS3253-6.htm
