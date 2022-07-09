@@ -33,5 +33,6 @@ Depends:
 Suggests:
       kableExtra,
     	knitr, 
-    	rmarkdown
+    	rmarkdown,
+    	tibble
 VignetteBuilder: knitr
