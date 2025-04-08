@@ -23,6 +23,21 @@ to their ICPSR/voteview id numbers.
 library(legislators)
 ```
 
+# Bugs 
+
+Issue #1 with this package is that congress.gov occasionally restricts access to the protocol used by `rvest`, which this package uses. This can happen for several reasons, some within and some outside of our control. 
+
+A 403 Forbidden Error occurs when you do not have permission to access a web page. If you get 403 error, first test whether you get a 403 using rvest to access the homepage of congress.gov.
+```
+rvest::read_html("https://www.congress.gov")
+```
+If you do, then this error is not a result of any code in `congressionalrecord`, nor the particular pages you are seeking. It is simply that congress.gov is not allowing scraping. I don't know why this happens, but in the past, it has resolved on its own. 
+
+Second, try it on another computer and/or from another internet network/IP address. Sometimes, congress.gov blocks only your IP address.
+
+If (1) you are able to get results with `rvest` AND (2) you are able to access a page you are seeking on congress.gov in your browser (i.e., it exists), but not when you search for it using `congressionalrecord`, then please file a bug report by opening an issue with reprex code and the url to a page that you expected to be returned. 
+
+
 # Usage
 
 This package contains functions to do three things: (1) scrape, (2)
@@ -31,7 +46,7 @@ parse, and (3) analyze the Congressional Record
 ### 1. Scrape metadata from congress.gov and download the text of the Congressional Record
 
 There are two main scraper functions to (1) scrape metadata on sections
-of the record (e.g. “house-section” or “sentate-section”), including
+of the record (e.g., “house-section” or “sentate-section”), including
 URLs to the raw text for that section and then (2) save them as htm
 files in a directory.
 
