@@ -60,7 +60,10 @@ There are two main scraper functions to (1) scrape metadata on sections of the r
 `get_cr_df()` first scrapes metadata for all subsections for each day of the record, including headers and links to the raw text. 
 
 ```{r}
-cr_metadata <- get_cr_df(as.Date("2007/03/01"), section = "senate-section")
+cr_metadata <- get_cr_df(
+  date = as.Date("2007/03/01"), 
+  section = "senate-section"
+                         )
 
 cr_metadata
 ```

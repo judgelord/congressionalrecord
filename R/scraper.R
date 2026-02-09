@@ -1,15 +1,44 @@
 # a function to make a data frame of of all cr text urls for a date
 get_cr_df <- function(date, section){
-
-  message(date)
-
-  url <- str_c("https://www.congress.gov/congressional-record",
+  
+  tryCatch({
+    # Code that might throw an error
+    test <- rvest::read_html("https://www.un.org")
+  }, error = function(e) {
+    print('is rvest installed? rvest::read_html("https://un.org/") ')
+    print(e)}
+  )
+  
+  tryCatch({
+    # Code that might throw an error
+    test <- rvest::read_html("https://www.congress.gov")
+  }, error = function(e) {
+    print('congress.gov may be blocking access. rvest::read_html("https://www.congress.gov") ')
+    print(e)}
+  )
+  
+  date <- as.Date(date)
+  
+  if(is.na(date)){
+    message(date, " is NA as.Date()")
+    next
+  } else {
+    message(date, "")
+  } 
+  
+  url <- stringr::str_c("https://www.congress.gov/congressional-record",
                date %>% str_replace_all("-", "/"),
                section, sep = "/")
+  
+  # congress.gov has been blocking scraping 
+  # to test use 
+  # url <- "https://www.un.org/"
+  # url <- "https://www.congress.gov"
+  # url <- "https://www.congress.gov/congressional-record/volume-153/issue-35/senate-section"
 
 
-  pages <- read_html(url) %>%
-    html_nodes("a") # "a" nodes are linked text
+  pages <- rvest::read_html(url) %>%
+    rvest::html_nodes("a") # "a" nodes are linked text
 
 
   d <- tibble(header = html_text(pages), # the text of the linked text
